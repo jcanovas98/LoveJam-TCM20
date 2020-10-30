@@ -19,23 +19,23 @@ function love.load(arg)
   table.insert(actorList, player)
   
   local blast = Blast:extend()
-  blast:new("spr/blast.png", 0, h, 0.5, 0.1)
+  blast:new("spr/blast.png", 0, h, 0.5, 0.05)
   table.insert(actorList, blast)
   
   local blast1 = Blast:extend()
-  blast1:new("spr/blast.png", 0, h/2, 0.5, 0.1)
+  blast1:new("spr/blast.png", 0, h/2, 0.5, 0.05)
   table.insert(actorList, blast1)
   
   local blast2 = Blast:extend()
-  blast2:new("spr/blast.png", w, h/2, 0.5, 0.1)
+  blast2:new("spr/blast.png", w, h/2, 0.5, 0.05)
   table.insert(actorList, blast2)
   
   local blast3 = Blast:extend()
-  blast3:new("spr/blast.png", w, h, 0.5, 0.1)
+  blast3:new("spr/blast.png", w, h, 0.5, 0.05)
   table.insert(actorList, blast3)
   
   local blast4 = Blast:extend()
-  blast4:new("spr/blast.png", 0, h, 0.5, 0.1)
+  blast4:new("spr/blast.png", 0, h, 0.5, 0.05)
   table.insert(actorList, blast4)
 end
 function love.update(dt)
