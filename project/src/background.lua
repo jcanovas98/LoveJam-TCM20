@@ -4,6 +4,7 @@ local Background = Object:extend()
 local w, h = love.graphics.getDimensions()
 
 function Background:new(speed)
+  self.tag = "background"
   self.speed = speed
   self.lines = {5*h/12, 4*h/12, 3*h/12, 2*h/12, h/12, 0} --generar lineas automaticamente, solo num de lineas
   self.varH = 0
@@ -62,10 +63,10 @@ function Background:draw()
       w/2 + self.lines[i] /cosAlpha* sinAlpha + minW/2, h/2 + self.lines[i]) --ajustar el ancho min según el grosso de linea
     --linea vertical
     love.graphics.line(w/2 - minW/2 - self.lines[i]/ cosAlpha * sinAlpha, h/2 - minH, 
-      w/2 - minW/2 - self.lines[i]/ cosAlpha * sinAlpha, h/2 + self.lines[i] / cosAlpha * cosAlpha)
+      w/2 - minW/2 - self.lines[i]/ cosAlpha * sinAlpha, h/2 + self.lines[i])
     
     love.graphics.line(w/2 + minW/2 + self.lines[i]/ cosAlpha * sinAlpha, h/2 - minH, 
-      w/2 + minW/2 + self.lines[i]/ cosAlpha * sinAlpha, h/2 + self.lines[i] / cosAlpha * cosAlpha)
+      w/2 + minW/2 + self.lines[i]/ cosAlpha * sinAlpha, h/2 + self.lines[i])
     lineWidth = lineWidth - 2
   end
 end

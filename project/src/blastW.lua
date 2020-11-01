@@ -4,7 +4,7 @@ local Vector = Vector or require "src/vector"
 local Blast = Object:extend()
 local w, h = love.graphics.getDimensions()
 
-function Blast:new(image,x,y,time,iscale)
+function Blast:new(image,x,y,time,iscale, xC, yC)
   self.tag = "blast"
   self.position = Vector.new(x or 0, y or 0)
   self.scale = Vector.new(1,1)
@@ -15,9 +15,14 @@ function Blast:new(image,x,y,time,iscale)
   self.width  = self.image:getWidth()
   
   self.iscalec = iscale
-  self.xF =  w/2 - minW/2 + self.position.x * minW / w
-  self.yF = h/2 - minH - minH/2 + self.position.y * minH / h
-
+  --punto donde se centran las balas
+  self.xC = xC
+  self.yC = yC
+  self.centered = false
+  --punto final
+  self.xF =  w/2 - minW/2 + xC * minW / w
+  self.yF = h/2 - minH - minH/2 + yC * minH / h
+  
   self.forward = Vector.new(self.xF - self.position.x, self.yF - self.position.y)
   self.forward:normalize()
   
@@ -28,8 +33,8 @@ end
 
 function Blast:update(dt)
   self.position = self.position + self.forward * self.speed * dt
-  self.distM = self.dist - math.sqrt(math.pow(self.xF - self.position.x, 2) + math.pow(self.yF - self.position.y, 2))
   
+  self.distM = self.dist - math.sqrt(math.pow(self.xF - self.position.x, 2) + math.pow(self.yF - self.position.y, 2))
   self.iscale = self.iscalec * (1 - self.distM / self.dist)--cons size/px + trigo
 end
 
