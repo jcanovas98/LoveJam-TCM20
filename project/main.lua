@@ -15,22 +15,22 @@ function love.load(arg)
   table.insert(actorList, background)
   
   local player = Player:extend()
-  player:new("spr/xwing.png", w/2, h - h/4, 100, 0.25)
+  player:new("spr/xwing2.png", w/2, h - h/4, 100, 0.75)
   table.insert(actorList, player)
   
   local enemy = Enemy:extend()
-  enemy:new("spr/blast.png", w/2 - 50, h + 150, 2, 0.2)
+  enemy:new("spr/blast.png", w/2 - 50, h + 150, 10, 0.2)
   table.insert(actorList, enemy)
   
   local enemy1 = Enemy:extend()
-  enemy1:new("spr/blast.png", w/2 - 100, h - 100, 2, 0.2)
+  enemy1:new("spr/blast.png", w/2 - 100, h - 100, 10, 0.2)
   table.insert(actorList, enemy1)
 end
 function love.update(dt)
   --collision list
   for _,v in ipairs(actorList) do
     if v.tag == "blast" then
-      if (v.position.y <= v.yF + 3 and v.position.y >= v.yF - 3) and (v.position.x <= v.xF + 3 and v.position.x >= v.xF - 3 or v.position.y <= h/2) then
+      if (v.position.y <= v.yF + 3 and v.position.y >= v.yF - 3) and (v.position.x <= v.xF + 3 and v.position.x >= v.xF - 3) or v.position.y <= h/2 then
         table.remove(actorList, _)
       end
     end

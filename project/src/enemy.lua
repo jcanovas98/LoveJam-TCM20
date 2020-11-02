@@ -38,7 +38,6 @@ function Enemy:update(dt)
   
   self.distM = self.dist - math.sqrt(math.pow(self.xF - self.position.x, 2) + math.pow(self.yF - self.position.y, 2))
   self.iscale = self.iscalec * (self.distM / self.dist)--cons size/px + trigo
-    print(self.position.x, self.position.y)
 end
 
 function Enemy:draw()
