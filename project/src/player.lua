@@ -21,31 +21,45 @@ function Player:new(image,x,y,speed,iscale)
   self.origin = Vector.new(self.image:getWidth()/2 ,self.image:getHeight()/2)
   self.height = self.image:getHeight()
   self.width  = self.image:getWidth()
+  self.timer = 0
 end
 
 function Player:update(dt, actorList)
-  --reprogramar movimiento con aceleración
+  --Movement
   if love.keyboard.isDown("s") then
-    self.forward.y = 1
+    self.forward.y = self.forward.y + 0.1
     self.image = love.graphics.newImage("spr/xwing1.png")
   elseif love.keyboard.isDown("w") then
-    self.forward.y = -1
+    self.forward.y = self.forward.y - 0.1
   else
-    self.forward.y = 0
+    if self.forward.y < 0.2 and self.forward.y > -0.2  then
+      self.forward.y = 0
+    elseif self.forward.y > 0 then
+      self.forward.y = self.forward.y - 0.2
+    elseif self.forward.y < 0 then
+      self.forward.y = self.forward.y + 0.2
+    end
     self.image = love.graphics.newImage("spr/xwing2.png")
   end
   
   if love.keyboard.isDown("d") then
-    self.forward.x = 1
+    self.forward.x = self.forward.x + 0.1
         self.image = love.graphics.newImage("spr/xwing3i.png")
   elseif love.keyboard.isDown("a") then
-    self.forward.x = -1
+    self.forward.x = self.forward.x - 0.1
         self.image = love.graphics.newImage("spr/xwing3d.png")
   else
-    self.forward.x = 0
+    if self.forward.x < 0.2 and self.forward.x > -0.2 then
+      self.forward.x = 0
+    elseif self.forward.x > 0 then
+      self.forward.x = self.forward.x - 0.2
+    elseif self.forward.x < 0 then
+      self.forward.x = self.forward.x + 0.2
+    end
   end
   
-  if love.keyboard.isDown("space") then --delay al disparar
+  --Shoot
+  if love.keyboard.isDown("space") and self.timer > 0.5 and (self.forward.x < 0.1 and self.forward.x > -0.1) and (self.forward.y < 0.1 and self.forward.y > -0.1) then
     local blast11 = Blast("spr/blast.png", self.position.x - wingW,  self.position.y + wingH1 , 2, 0.05, self.position.x, self.position.y)
     table.insert(actorList, blast11)
     local blast12 = Blast("spr/blast.png", self.position.x + wingW,  self.position.y + wingH1 , 2, 0.05, self.position.x, self.position.y)
@@ -54,9 +68,19 @@ function Player:update(dt, actorList)
     table.insert(actorList, blast21)
     local blast22 = Blast("spr/blast.png", self.position.x + wingW,  self.position.y + wingH2 , 2, 0.05, self.position.x, self.position.y)
     table.insert(actorList, blast22)
+    self.timer = 0
   end
+  self.timer = self.timer + dt
   
+  --Collision
+  if (self.position.y >= h - self.height/2 and self.forward.y > 0) or (self.position.y <= h/2 - minH + self.height/2  and self.forward.y < 0) then
+    self.forward.y = 0
+  end
+  if (self.position.x >= w - self.width/2 and self.forward.x > 0) or (self.position.x <= 0 + self.width/2 and self.forward.x < 0) then
+    self.forward.x = 0
+  end
   self.position = self.position + self.forward * self.speed * dt
+  
 end
 
 function Player:draw()

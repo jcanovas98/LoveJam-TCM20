@@ -40,6 +40,7 @@ function Blast:update(dt)
   self.distM = self.dist - math.sqrt(math.pow(self.xF - self.position.x, 2) + math.pow(self.yF - self.position.y, 2))
   self.depthR = self.distM / self.dist
   self.iscale = self.iscalec * (1 - self.depthR)--cons size/px + trigo
+  print(self.depthR)
 end
 
 function Blast:draw()
