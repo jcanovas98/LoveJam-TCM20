@@ -1,3 +1,4 @@
-alpha = math.rad(51)
-minH = 50--proporcionalitat 4/3 (pantalla)
-minW = 66.67
+alpha = math.rad(50)
+minH = 25--proporcionalitat 8/3 (pantalla)
+minW = minH * 8 / 3
+debug = true
