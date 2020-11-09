@@ -10,20 +10,16 @@ local actorList = {}
 function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end -- Enable the debugging with ZeroBrane Studio
   
-  local background = Background:extend()
-  background:new(100)
+  local background = Background(100)
   table.insert(actorList, background)
   
-  local player = Player:extend()
-  player:new("spr/xwing2.png", w/2, h - h/4, 100, 0.75)
+  local player = Player("spr/xwing2.png", w/2, h - h/4, 100, 0.75)
   table.insert(actorList, player)
   
-  local enemy = Enemy:extend()
-  enemy:new("spr/blast.png", w/2 - 50, h + 150, 10, 0.2)
-  table.insert(actorList, enemy)
+  --local enemy = Enemy("spr/blast.png", w/2 - 300, h - 200, 10, 0.2)
+  --table.insert(actorList, enemy)
   
-  local enemy1 = Enemy:extend()
-  enemy1:new("spr/blast.png", w/2 - 100, h - 100, 10, 0.2)
+  local enemy1 = Enemy("1","spr/blast.png", w/2 - 100, h - 100, 10, 0.2)
   table.insert(actorList, enemy1)
 end
 function love.update(dt)

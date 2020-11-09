@@ -40,7 +40,7 @@ function Blast:update(dt)
   self.distM = self.dist - math.sqrt(math.pow(self.xF - self.position.x, 2) + math.pow(self.yF - self.position.y, 2))
   self.depthR = self.distM / self.dist
   self.iscale = self.iscalec * (1 - self.depthR)--cons size/px + trigo
-  print(self.depthR)
+  print(self.forward.x)
 end
 
 function Blast:draw()
@@ -48,6 +48,7 @@ function Blast:draw()
     love.graphics.setLineWidth(1)
     love.graphics.setColor(0.5, 0, 0)
     love.graphics.line(self.x, self.y, self.xF, self.yF)
+    love.graphics.line(self.position.x, self.position.y, self.position.x + self.forward.x * 2, self.position.y + self.forward.y * 2)
   end
   love.graphics.setColor(1, 1, 1)
   love.graphics.draw(self.image, self.position.x, self.position.y, 0, self.iscale, self.iscale, self.origin.x, self.origin.y)
