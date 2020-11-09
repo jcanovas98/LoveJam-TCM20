@@ -31,6 +31,9 @@ function Blast:update(dt)
   self.distM = self.dist - math.sqrt(math.pow(self.xF - self.position.x, 2) + math.pow(self.yF - self.position.y, 2))
   
   self.iscale = self.iscalec * (1 - self.distM / self.dist)--cons size/px + trigo
+  
+  self.height = self.image:getHeight() * self.iscale
+  self.width  = self.image:getWidth() * self.iscale
 end
 
 function Blast:draw()
