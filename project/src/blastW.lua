@@ -44,13 +44,7 @@ function Blast:update(dt, actorList)
   self.height = self.image:getHeight() * self.iscale
   self.width  = self.image:getWidth() * self.iscale
   
-  if (self.position.y <= self.yF + 3 and self.position.y >= self.yF - 3) and (self.position.x <= self.xF + 3 and self.position.x >= self.xF - 3) or self.position.y <= h/2 then
-    for _,v in ipairs(actorList) do
-      if v.tag == self.tag then
-        table.remove(actorList, _)
-      end
-    end
-  end
+  self:tunelEndCollision(actorList)
 end
 
 function Blast:draw()
@@ -63,6 +57,20 @@ function Blast:draw()
     --love.graphics.line(self.position.x, self.position.y, self.position.x + self.forward.x * 2, self.position.y + self.forward.y * 2)
   end
     love.graphics.setColor(1, 1, 1)
+end
+
+function Blast:tunelEndCollision(actorList)
+  if (self.position.y <= self.yF + 3 and self.position.y >= self.yF - 3) and (self.position.x <= self.xF + 3 and self.position.x >= self.xF - 3) or self.position.y <= h/2 then
+    self:destroy(actorList)
+  end
+end
+
+function Blast:destroy(actorList)
+  for _,v in ipairs(actorList) do
+    if v.tag == self.tag then
+      table.remove(actorList, _)
+    end
+  end
 end
 
 return Blast

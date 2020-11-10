@@ -13,7 +13,7 @@ function love.load(arg)
   local background = Background(100)
   table.insert(actorList, background)
   
-    local enemy1 = Enemy("1","spr/Meteor1.png", w/2 - 100, h - 150, 10, 0.5)
+    local enemy1 = Enemy("1","spr/Meteor1.png", w/2 - 100, h - 100, 10, 0.5)
   table.insert(actorList, enemy1)
   
   local player = Player("spr/xwing2.png", w/2, h - h/4, 100, 0.75)

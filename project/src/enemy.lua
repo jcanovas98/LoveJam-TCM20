@@ -45,40 +45,12 @@ function Enemy:update(dt, actorList)
   self.height = self.image:getHeight() * self.iscale
   self.width  = self.image:getWidth() * self.iscale
   
-  if self.depthR >= 0.85 and self.depthR < 0.99 then
-    for _,v in ipairs(actorList) do
-      if v.tag == "player" then
-        if self.position.x + self.width/2 > v.position.x and self.position.x < v.position.x + v.width/2 and 
-        self.position.y + self.height/2 > v.position.y and self.position.y < v.position.y + v.height/2 then
-          print("Collision")
-          for i,k in ipairs(actorList) do
-            if k.tag == self.tag then
-              table.remove(actorList, i)
-            end
-          end
-        end
-      end
-    end
-  elseif self.depthR >= 0.99 then
+  self:playerCollision(dt, actorList)
+  
+  elseif self.depthR >= 0.99 then --screen end collision
     self:destroy(actorList)
   end
-
-  for _,v in ipairs(actorList) do
-    if v.tag:sub(1,5) == "blast" then
-      if math.abs(1 - v.depthR - self.depthR) <= 0.15 then
-        if self.position.x + self.width/2 > v.position.x and self.position.x < v.position.x + v.width/2 and 
-        self.position.y + self.height/2 > v.position.y and self.position.y < v.position.y + v.height/2 then
-          print(self.position.x, self.width/2, self.position.y, self.height/2)
-          print(v.position.x, v.width, v.position.y, v.height)
-          table.remove(actorList, _)
-          self.destroyD = true
-        end
-      end
-    end
-  end
-  if self.destroyD then
-    self:destroy(actorList)
-  end
+  self:blastCollision(dt,actorList)
 end
 
 function Enemy:draw()
@@ -92,6 +64,36 @@ function Enemy:draw()
   love.graphics.setColor(self.depthR + 0.25,self.depthR + 0.25,self.depthR + 0.25)
   love.graphics.draw(self.image, self.position.x, self.position.y, 0, self.iscale, self.iscale, self.origin.x, self.origin.y)
   love.graphics.setColor(1,1,1)
+end
+
+function Enemy:blastCollision(dt, actorList)
+  for _,v in ipairs(actorList) do
+    if v.tag:sub(1,5) == "blast" then
+      if math.abs(1 - v.depthR - self.depthR) <= 0.2 then
+        if self.position.x + self.width/2 > v.position.x and self.position.x < v.position.x + v.width/2 and 
+        self.position.y + self.height/2 > v.position.y and self.position.y < v.position.y + v.height/2 then
+          table.remove(actorList, _) --remove blast
+          self.destroyD = true
+        end
+      end
+    end
+  end
+  if self.destroyD then
+    self:destroy(actorList)
+    --remove all blast before destroying self
+  end
+end
+
+function Enemy:playerCollision(dt, actorList)
+  if self.depthR >= 0.85 and self.depthR < 0.99 then
+    for _,v in ipairs(actorList) do
+      if v.tag == "player" then
+        if self.position.x + self.width/2 > v.position.x and self.position.x < v.position.x + v.width/2 and 
+        self.position.y + self.height/2 > v.position.y and self.position.y < v.position.y + v.height/2 then
+          self:destroy(actorList) --remove meteor
+      end
+    end
+  end
 end
 
 function Enemy:destroy(actorList)
