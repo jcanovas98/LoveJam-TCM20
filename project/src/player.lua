@@ -4,9 +4,10 @@ local Blast = Blast or require "src/blastW"
 require "data"
 local w, h = love.graphics.getDimensions()
 
-local wingW = 70
-local wingH1 = -45
-local wingH2 = 5
+local wingW1 = 55
+local wingW2 = 55
+local wingH1 = -60
+local wingH2 = 8
 local Player = Object:extend()
 local dist = 100
 
@@ -19,8 +20,8 @@ function Player:new(image,x,y,speed,iscale)
   self.image = love.graphics.newImage(image or nil)
   self.iscale = iscale
   self.origin = Vector.new(self.image:getWidth()/2 ,self.image:getHeight()/2)
-  self.height = self.image:getHeight()
-  self.width  = self.image:getWidth()
+  self.height = self.image:getHeight() * iscale
+  self.width  = self.image:getWidth() * iscale
   self.timer = 0
 end
 
@@ -60,13 +61,17 @@ function Player:update(dt, actorList)
   
   --Shoot
   if love.keyboard.isDown("space") and self.timer > 0.5 and (self.forward.x < 0.1 and self.forward.x > -0.1) and (self.forward.y < 0.1 and self.forward.y > -0.1) then
-    local blast11 = Blast("spr/blast.png", self.position.x - wingW,  self.position.y + wingH1 , 2, 0.05, self.position.x, self.position.y)
+    blastNum = blastNum + 1 
+    local blast11 = Blast(tostring(blastNum),"spr/blast.png", self.position.x - wingW1 - 7,  self.position.y + wingH1 , 2, 0.05, self.position.x, self.position.y)
     table.insert(actorList, blast11)
-    local blast12 = Blast("spr/blast.png", self.position.x + wingW,  self.position.y + wingH1 , 2, 0.05, self.position.x, self.position.y)
+    blastNum = blastNum + 1
+    local blast12 = Blast(tostring(blastNum),"spr/blast.png", self.position.x + wingW1,  self.position.y + wingH1 , 2, 0.05, self.position.x, self.position.y)
     table.insert(actorList, blast12)
-    local blast21 = Blast("spr/blast.png", self.position.x - wingW,  self.position.y + wingH2 , 2, 0.05, self.position.x, self.position.y)
+    blastNum = blastNum + 1
+    local blast21 = Blast(tostring(blastNum),"spr/blast.png", self.position.x - wingW2 - 7,  self.position.y + wingH2 , 2, 0.05, self.position.x, self.position.y)
     table.insert(actorList, blast21)
-    local blast22 = Blast("spr/blast.png", self.position.x + wingW,  self.position.y + wingH2 , 2, 0.05, self.position.x, self.position.y)
+    blastNum = blastNum + 1
+    local blast22 = Blast(tostring(blastNum),"spr/blast.png", self.position.x + wingW2,  self.position.y + wingH2 , 2, 0.05, self.position.x, self.position.y)
     table.insert(actorList, blast22)
     self.timer = 0
   end
@@ -91,7 +96,15 @@ function Player:draw()
   if debug then
     love.graphics.setLineWidth(1)
     love.graphics.setColor(0.5, 0, 0)
-    love.graphics.line(xI, yI, xF, yF)
+    xF =  self.position.x * minW / w + w/2 - minW/2
+    yF = (self.position.y - h/2) * minH / (h/2) + (h/2 - minH)
+    if not (love.keyboard.isDown("w") or love.keyboard.isDown("s") or love.keyboard.isDown("a") or love.keyboard.isDown("d")) then
+      love.graphics.line(self.position.x - wingW1 - 7, self.position.y + wingH1, xF, yF)
+      love.graphics.line(self.position.x + wingW1, self.position.y + wingH1, xF, yF)
+      love.graphics.line(self.position.x - wingW2 - 7, self.position.y + wingH2, xF, yF)
+      love.graphics.line(self.position.x + wingW2, self.position.y + wingH2, xF, yF)
+    end
+    --love.graphics.line(xI, yI, xF, yF)
   end
   love.graphics.setColor(1, 1, 1)
   love.graphics.draw(self.image, self.position.x, self.position.y, 0, self.iscale, self.iscale, self.origin.x, self.origin.y)
