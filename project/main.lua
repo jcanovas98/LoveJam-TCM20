@@ -54,7 +54,6 @@ local w, h = love.graphics.getDimensions()
 --actors
 local Player = Player or require "src/player"
 local Background = Background or require "src/background"
-local Blast = Blast or require "src/blast"
 local Enemy = Enemy or require "src/enemy"
 local actorList = {}
 

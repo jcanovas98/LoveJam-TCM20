@@ -47,7 +47,7 @@ function Enemy:update(dt, actorList)
   
   self:playerCollision(dt, actorList)
   
-  elseif self.depthR >= 0.99 then --screen end collision
+  if self.depthR >= 0.99 then --screen end collision
     self:destroy(actorList)
   end
   self:blastCollision(dt,actorList)
@@ -95,6 +95,8 @@ function Enemy:playerCollision(dt, actorList)
     end
   end
 end
+end
+
 
 function Enemy:destroy(actorList)
     for _,v in ipairs(actorList) do
