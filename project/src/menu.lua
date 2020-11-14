@@ -79,8 +79,8 @@ function Menu:draw()
     
     if select then
       
-      love.graphics.draw(asteroid, bX-60, bY+30, asteroidRot, 0.3, 0.3, 224, 224)
-      love.graphics.draw(asteroid, bX+buttonW+60, bY+30, asteroidRot+180, 0.3, 0.3, 224, 224)
+      love.graphics.draw(asteroid, bX-60, bY+30, asteroidRot, 0.3, 0.3, 224*0.5, 224*0.5)
+      love.graphics.draw(asteroid, bX+buttonW+60, bY+30, asteroidRot+180, 0.3, 0.3, 224*0.5, 224*0.5)
       love.graphics.setColor(1, 1, 1, 1)
     else
       love.graphics.setColor(1,1,1, 0.5)

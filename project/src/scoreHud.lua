@@ -20,7 +20,7 @@ function ScoreHud:new()
   
   self.score = 0
   
-  font = love.graphics.newFont("Starjhol.ttf",100)
+  font = love.graphics.newFont("Starjedi.ttf",100)
   love.graphics.setFont(font)
 end
 
@@ -33,9 +33,10 @@ function ScoreHud:update(dt)
 end
 
 function ScoreHud:draw()
-  love.graphics.setColor(1, 0.8, 0)
-  love.graphics.print("Score: "..math.floor(self.score), w - 375, 40 ,0,1/2,1/2)
-  love.graphics.print("Record: "..math.floor(loadScore), w - 375, 120 ,0,1/2,1/2)
+ -- love.graphics.setColor(1, 0.8, 0)
+ love.graphics.setColor(256,256,256)
+  love.graphics.print("score: "..math.floor(self.score), w - 230, 20 ,0,1/4,1/4)
+  love.graphics.print("record: "..math.floor(loadScore), w - 230, 60 ,0,1/4,1/4)
   love.graphics.setColor(1, 1, 1)
 end
 

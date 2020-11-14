@@ -14,13 +14,20 @@ local alpha1 = 0
 local alpha2 = 256
 
 function Gameover:new()
-  --self.image = love.graphics.newImage("spr/gameover.jpg")
+  self.image = love.graphics.newImage("spr/gameoverScreen.png")
+  self.image:setFilter("nearest", "nearest") 
+  self.animation = self:NewAnimation(self.image, 480, 270, 1)
   gameoverTrack = audio:getGameover()
   self.timer = 0
   self.blinkTimer = 0
 end
 
 function Gameover:update(dt)
+  self.animation.currentTime = self.animation.currentTime + dt
+  if self.animation.currentTime >= self.animation.duration then
+    self.animation.currentTime = self.animation.currentTime - self.animation.duration
+  end
+  
   if (not self.alreadyPlayed) then
     gameoverTrack:play()
     self.alreadyPlayed = true
@@ -51,8 +58,11 @@ function Gameover:update(dt)
 end
 
 function Gameover:draw()
+  love.graphics.setColor(256,256,256)
+  local spriteNum1 = math.floor(self.animation.currentTime / self.animation.duration * #self.animation.quads) + 1
+  love.graphics.draw(self.animation.spriteSheet, self.animation.quads[spriteNum1], 0, 0, 0, 3, 3)
+  
   love.graphics.setColor(256,0,0, alpha1)
-  --love.graphics.draw(self.image, -130, -50, 0, 1, 1)
   love.graphics.print("mission failed", font1, w/6 - 60, h/3, 0, 1, 1)
   
   love.graphics.setColor(256,256,256, alpha2)
@@ -71,5 +81,23 @@ function Gameover:setRetry()
   self.alreadyPlayed = false
   self.timer = 0
 end
+
+function Gameover:NewAnimation(image, width, height, duration)
+    local animation = {}
+    animation.spriteSheet = image;
+    animation.quads = {};
+ 
+    for y = 0, image:getHeight() - height, height do
+        for x = 0, image:getWidth() - width, width do
+            table.insert(animation.quads, love.graphics.newQuad(x, y, width, height, image:getDimensions()))
+        end
+    end
+ 
+    animation.duration = duration or 1
+    animation.currentTime = 0
+ 
+    return animation
+end
+
 return Gameover
 

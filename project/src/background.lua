@@ -10,18 +10,28 @@ function Background:new(speed)
   self.varH = 0
   self.varW = 0
   
+  hudImage = love.graphics.newImage("spr/lowerHud.png")
+  
   spaceImage = love.graphics.newImage("spr/upperBackground.png")
-  spaceImage:setFilter("nearest", "nearest") -- PENDIENTE ARREGLAR BLUR Y RES
-  self.animation = self:NewAnimation(spaceImage, 1024, 356, 1)
+  spaceImage:setFilter("nearest", "nearest") 
+  self.animationCeiling = self:NewAnimation(spaceImage, 256, 137, 1)
+  
+  groundImage = love.graphics.newImage("spr/groundBackground.png")
+  groundImage:setFilter("nearest", "nearest") 
+  self.animationGround = self:NewAnimation(groundImage, 256, 137, 1/1.5)
 end
 
 function Background:update(dt)    
   --Upper background animation--
-  self.animation.currentTime = self.animation.currentTime + dt
-  if self.animation.currentTime >= self.animation.duration then
-    self.animation.currentTime = self.animation.currentTime - self.animation.duration
+  self.animationCeiling.currentTime = self.animationCeiling.currentTime + dt
+  if self.animationCeiling.currentTime >= self.animationCeiling.duration then
+    self.animationCeiling.currentTime = self.animationCeiling.currentTime - self.animationCeiling.duration
   end
   
+  self.animationGround.currentTime = self.animationGround.currentTime + dt
+  if self.animationGround.currentTime >= self.animationGround.duration then
+    self.animationGround.currentTime = self.animationGround.currentTime - self.animationGround.duration
+  end
   --speed
   for i = 1, #self.lines do
     self.lines[i] = self.lines[i] + self.speed * dt
@@ -82,9 +92,16 @@ function Background:draw()
     lineWidth = lineWidth - 2
   end
   
-  --Upper background--
-  local spriteNum = math.floor(self.animation.currentTime / self.animation.duration * #self.animation.quads) + 1
-  love.graphics.draw(self.animation.spriteSheet, self.animation.quads[spriteNum], 0, 0, 0)
+  --Upper background--animationGround
+  love.graphics.setColor(256,256,256)
+  
+  local spriteNum1 = math.floor(self.animationCeiling.currentTime / self.animationCeiling.duration * #self.animationCeiling.quads) + 1
+  love.graphics.draw(self.animationCeiling.spriteSheet, self.animationCeiling.quads[spriteNum1], 0, 0, 0, 4, 3)
+  
+  local spriteNum2 = math.floor(self.animationGround.currentTime / self.animationGround.duration * #self.animationGround.quads) + 1
+  love.graphics.draw(self.animationGround.spriteSheet, self.animationGround.quads[spriteNum2], 0, h/3 - 125, 0, 4, 5)
+  
+  love.graphics.draw(hudImage, 0, -20, 0)
 end
 
 function Background:NewAnimation(image, width, height, duration)

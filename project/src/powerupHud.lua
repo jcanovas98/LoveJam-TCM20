@@ -45,19 +45,19 @@ end
 
 function PowerupHud:draw()
 --shield powerup hud--
-  love.graphics.setColor( 0.3, 0.3, 0.3 )
-  love.graphics.arc( "fill", 75, 590, 44, math.rad(-90), math.rad(270))
+  love.graphics.setColor( 256, 256, 256 )
+  love.graphics.arc( "fill", 65, 60, 44, math.rad(-90), math.rad(270))
   love.graphics.setColor( 0, 0, 1 )
-  love.graphics.arc( "fill", 75, 590, 40, math.rad(-90), math.rad(self.shieldAngle))
+  love.graphics.arc( "fill", 65, 60, 40, math.rad(-90), math.rad(self.shieldAngle))
   love.graphics.setColor(0, 0, 0 )
-  love.graphics.draw(self.shieldIcon, 29, 560, 0, 0.18, 0.18)
+  love.graphics.draw(self.shieldIcon, 19, 30, 0, 0.18, 0.18)
   
 --speed powerup hud--
-  love.graphics.setColor( 0.3, 0.3, 0.3 )
-  love.graphics.arc( "fill", 180, 700, 44, math.rad(-90), math.rad(270))
+  love.graphics.setColor( 256, 256, 256 )
+  love.graphics.arc( "fill", 170, 60, 44, math.rad(-90), math.rad(270))
   love.graphics.setColor( 0, 0, 1 )
-  love.graphics.arc( "fill", 180, 700, 40, math.rad(-90), math.rad(self.speedAngle))
-  love.graphics.draw(self.speedIcon, 150, 670, 0, 0.12, 0.12)
+  love.graphics.arc( "fill", 170, 60, 40, math.rad(-90), math.rad(self.speedAngle))
+  love.graphics.draw(self.speedIcon, 141, 30, 0, 0.12, 0.12)
   
 end
 

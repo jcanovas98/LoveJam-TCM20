@@ -23,10 +23,10 @@ end
 
 function HealthHud:draw()
   love.graphics.setColor( 0.1, 0.1, 0.1 )
-  love.graphics.arc( "fill", 75, 695, 64, math.rad(-90), math.rad(270))
+  love.graphics.arc( "fill", 328, 63, 64, math.rad(-90), math.rad(270))
   love.graphics.setColor( 0, 0.6, 0 )
-  love.graphics.arc( "fill", 75, 695, 60, math.rad(self.healthAngle), math.rad(270))
-  love.graphics.draw(self.image, 36, 655, 0, 0.15, 0.15)
+  love.graphics.arc( "fill", 328, 63, 60, math.rad(self.healthAngle), math.rad(270))
+  love.graphics.draw(self.image, 291, 23, 0, 0.15, 0.15)
 end
 
 function HealthHud:getHealth()
