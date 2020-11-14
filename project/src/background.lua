@@ -10,7 +10,9 @@ function Background:new(speed)
   self.varH = 0
   self.varW = 0
   
-  self.animation = self:NewAnimation(love.graphics.newImage("spr/upperBackground.png"), 1024, 356, 1)
+  spaceImage = love.graphics.newImage("spr/upperBackground.png")
+  spaceImage:setFilter("nearest", "nearest") -- PENDIENTE ARREGLAR BLUR Y RES
+  self.animation = self:NewAnimation(spaceImage, 1024, 356, 1)
 end
 
 function Background:update(dt)    
@@ -48,9 +50,11 @@ function Background:update(dt)
   ]]--
   minH = minH + self.varH
   minW = minW + self.varH
+  
 end
 
 function Background:draw()
+  
   love.graphics.setColor(0, 0, 0)
   love.graphics.rectangle("fill", 0, 0, w, h/2)
   love.graphics.setColor(0.2, 0.2, 0.2)
