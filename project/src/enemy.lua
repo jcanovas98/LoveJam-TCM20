@@ -1,6 +1,7 @@
 local Object = Object or require "lib.classic"
 local Vector = Vector or require "src/vector"
 local Player = Player or require "src/player"
+local Explosion = Explosion or require "src/explosion"
 local PowerupHud = PowerupHud or require "src/powerupHud"
 local Enemy = Object:extend()
 local w, h = love.graphics.getDimensions()
@@ -36,7 +37,7 @@ function Enemy:new(num,image,x,y,time,iscale)
   self.destroyD = false
 end
 
-function Enemy:update(dt, actorList)
+function Enemy:update(dt, actorList)  
   self.position = self.position + self.forward * self.speed * dt
   
   self.distM = self.dist - math.sqrt(math.pow(self.xF - self.position.x, 2) + math.pow(self.yF - self.position.y, 2))
@@ -80,6 +81,8 @@ function Enemy:blastCollision(dt, actorList)
           if not player.activateSpeed then
             player.chargeSpeed = true
           end
+          local explosion = Explosion(self.position.x, self.position.y)
+          table.insert(actorList, explosion)
           self.destroyD = true
         end
       end
