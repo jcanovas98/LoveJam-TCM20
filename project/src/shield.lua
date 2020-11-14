@@ -11,8 +11,9 @@ function Shield:new()
   
   self.incrementScale = Vector.new(0.01, 0.01)
   self.iniScale = Vector.new(0, 0)
-  self.fullScale = Vector.new(0.37, 0.37)
+  self.fullScale = Vector.new(0.38, 0.38)
   self.scale = self.iniScale
+  self.shieldRot = 0
 end
 
 function Shield:update(dt, player)
@@ -26,13 +27,21 @@ function Shield:update(dt, player)
       self.scale = self.scale - self.incrementScale
     end
   end
+  
+  if love.keyboard.isDown("d") then
+    self.shieldRot = 20
+  elseif love.keyboard.isDown("a") then
+    self.shieldRot = -20
+  else
+    self.shieldRot = 0
+  end
 
 end
 
 function Shield:draw()
   --SHIELD EFFECT--
   if player.activateShield or self.scale > self.iniScale then
-    love.graphics.draw(self.shieldVFX, player.position.x - 105, player.position.y - 90, 0, self.scale.x, self.scale.y)
+    love.graphics.draw(self.shieldVFX, player.position.x - 3, player.position.y, math.rad(self.shieldRot), self.scale.x, self.scale.y, 278, 278)
   end
   
 end

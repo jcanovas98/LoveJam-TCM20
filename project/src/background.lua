@@ -9,9 +9,17 @@ function Background:new(speed)
   self.lines = {5*h/12, 4*h/12, 3*h/12, 2*h/12, h/12, 0} --generar lineas automaticamente, solo num de lineas
   self.varH = 0
   self.varW = 0
+  
+  self.animation = self:NewAnimation(love.graphics.newImage("spr/upperBackground.png"), 1024, 356, 1)
 end
 
 function Background:update(dt)    
+  --Upper background animation--
+  self.animation.currentTime = self.animation.currentTime + dt
+  if self.animation.currentTime >= self.animation.duration then
+    self.animation.currentTime = self.animation.currentTime - self.animation.duration
+  end
+  
   --speed
   for i = 1, #self.lines do
     self.lines[i] = self.lines[i] + self.speed * dt
@@ -69,6 +77,27 @@ function Background:draw()
       w/2 + minW/2 + self.lines[i]/ cosAlpha * sinAlpha, h/2 + self.lines[i])
     lineWidth = lineWidth - 2
   end
+  
+  --Upper background--
+  local spriteNum = math.floor(self.animation.currentTime / self.animation.duration * #self.animation.quads) + 1
+  love.graphics.draw(self.animation.spriteSheet, self.animation.quads[spriteNum], 0, 0, 0)
+end
+
+function Background:NewAnimation(image, width, height, duration)
+    local animation = {}
+    animation.spriteSheet = image;
+    animation.quads = {};
+ 
+    for y = 0, image:getHeight() - height, height do
+        for x = 0, image:getWidth() - width, width do
+            table.insert(animation.quads, love.graphics.newQuad(x, y, width, height, image:getDimensions()))
+        end
+    end
+ 
+    animation.duration = duration or 1
+    animation.currentTime = 0
+ 
+    return animation
 end
 
 return Background

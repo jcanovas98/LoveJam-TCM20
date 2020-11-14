@@ -139,10 +139,10 @@ function Player:UsePowerups(powerupHud)
     if key == "h" then
       self.health = self.health - 1
     end
-    if key == "j" and not self.activateShield then
+    if key == "j" and not self.activateShield and powerupHud.shieldAngle < 270  then
       self.chargeShield = true
     end
-    if key == "k" and not self.activateSpeed then
+    if key == "k" and not self.activateSpeed and powerupHud.speedAngle < 270 then
       self.chargeSpeed = true
     end
     if key == "q" and powerupHud.shieldAngle == 270 then
