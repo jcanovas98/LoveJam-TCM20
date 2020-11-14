@@ -4,8 +4,12 @@ local Menu = Object:extend()
 
 local w, h = love.graphics.getDimensions()
 local buttons = {}
+
 local startGame = false
 local transition = false
+local optionsPanel = false
+local controlsPanel = false
+
 local asteroidRot
 local font
 local timer = Timer:extend()
@@ -16,14 +20,19 @@ local asteroid = love.graphics.newImage("spr/Meteor1.png")
 local asteroids = love.graphics.newImage("spr/Asteroids.png")
 local buttonSprite = love.graphics.newImage("spr/button.png")
 local interfaceSprite = love.graphics.newImage("spr/interface.png")
+local panelSprite = love.graphics.newImage("spr/panelSprite.png")
 local t = timer(3, function() transition = true end)
+
 
 function Menu:new()
   table.insert(buttons, Menu:newButton(" Start", function() startGame = true end))
-  table.insert(buttons, Menu:newButton("Options", function() startGame = true end))
+  table.insert(buttons, Menu:newButton("Options", self.options))
+  table.insert(buttons, Menu:newButton("Controls", self.controls))
   table.insert(buttons, Menu:newButton("   Exit", function() love.event.quit(0) end))
+  
   self.image = background
   asteroidRot = 0
+  
 end
 
 
@@ -49,7 +58,7 @@ function Menu:draw()
   
   local margin = 120
   local buttonW = w/4
-  local buttonH = h/12
+  local buttonH = h/7
   local buttonX = w/2 - buttonW/2
   local buttonY = h/2 - buttonH/2 - 50
   font = love.graphics.newFont("Glitch inside.otf", 100)
@@ -79,16 +88,52 @@ function Menu:draw()
       button.f()
       end
       love.graphics.draw(buttonSprite, buttonX-5, buttonY-20 + margin * (i - 1), 0, 1.5, 1)
-    
-  love.graphics.setColor(1,1,1)
   
+  love.graphics.setColor(1,1,1)
+
   
   
   local textW = font:getWidth(button.text)
   local textH = font:getHeight(button.text)
+  if i == 3 then
+    font = love.graphics.newFont("Glitch inside.otf", 32)
+  else
+    font = love.graphics.newFont("Glitch inside.otf", 40)
+  end
+    
+  love.graphics.print(button.text, font, w/2 - buttonW/4-20, bY + buttonH/4-15)
   
-  love.graphics.print(button.text, font, w/2 - buttonW/4-20, bY + buttonH/4-3)
 end
+  
+  if (optionsPanel) then
+    love.graphics.setColor(1,1,1,0.9)
+    love.graphics.draw(panelSprite, w/1.61, h/2.6, 0, 0.9, 0.9)
+    font = love.graphics.newFont("Glitch inside.otf", 20)
+    love.graphics.setColor(0,0,0,1)
+    love.graphics.print("press enter to close", font, w/1.5+40, h/1.5)
+    love.graphics.setColor(1,1,1)
+    if love.keyboard.isDown("return") then
+      optionsPanel = false
+    end
+    
+  end
+  
+  if (controlsPanel) then
+    love.graphics.setColor(1,1,1,0.9)
+    love.graphics.draw(panelSprite, 0, h/2.6, 0, 0.9, 0.9)
+    font = love.graphics.newFont("Glitch inside.otf", 25)
+    love.graphics.setColor(0,0,0,1)
+    love.graphics.print("MOVE    -    W A S D", font, 50, h/2.1)
+    love.graphics.print("SHOOT  -  SPACE BAR", font, 30, h/1.75)
+    font = love.graphics.newFont("Glitch inside.otf", 20)
+    love.graphics.print("press enter to close", font, 90, h/1.5)
+    love.graphics.setColor(1,1,1)
+    if love.keyboard.isDown("return") then
+      controlsPanel = false
+    end
+    
+  end
+  
   if (startGame) then
     
     love.graphics.setColor(0,0,0,alpha)
@@ -111,7 +156,22 @@ function Menu:getStartGame()
   if (transition) then
     return startGame
   end
-
 end
+
+function Menu:options()
+  
+  if optionsPanel == false then
+    optionsPanel = true
+  end
+  
+end
+
+function Menu:controls()
+  if controlsPanel == false then
+    controlsPanel = true
+  end
+end
+
+
 
 return Menu
