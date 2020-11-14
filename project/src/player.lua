@@ -1,7 +1,9 @@
 local Object = Object or require "lib.classic"
 local Vector = Vector or require "src/vector"
 local Blast = Blast or require "src/blastW"
+local Audio = Audio or require "src/audio"
 require "data"
+
 local w, h = love.graphics.getDimensions()
 
 local wingW1 = 55
@@ -28,6 +30,9 @@ function Player:new(image,x,y,speed,iscale)
   self.activateShield = false
   self.chargeSpeed = false
   self.activateSpeed = false
+  
+  audio = Audio()
+  shootSound = audio:getShoot()
 end
 
 function Player:update(dt, actorList)
@@ -82,17 +87,19 @@ function Player:update(dt, actorList)
   
   --Shoot
   if love.keyboard.isDown("space") and self.timer > 0.5 and (self.forward.x < 0.1 and self.forward.x > -0.1) and (self.forward.y < 0.1 and self.forward.y > -0.1) then
+    shootSound:play()
+    
     blastNum = blastNum + 1 
-    local blast11 = Blast(tostring(blastNum),"spr/blast.png", self.position.x - wingW1 - 7,  self.position.y + wingH1 , 2, 0.05, self.position.x, self.position.y)
+    local blast11 = Blast(tostring(blastNum),"spr/blast3.png", self.position.x - wingW1 - 7,  self.position.y + wingH1 , 2, 0.02, self.position.x, self.position.y)
     table.insert(actorList, blast11)
     blastNum = blastNum + 1
-    local blast12 = Blast(tostring(blastNum),"spr/blast.png", self.position.x + wingW1,  self.position.y + wingH1 , 2, 0.05, self.position.x, self.position.y)
+    local blast12 = Blast(tostring(blastNum),"spr/blast3.png", self.position.x + wingW1,  self.position.y + wingH1 , 2, 0.02, self.position.x, self.position.y)
     table.insert(actorList, blast12)
     blastNum = blastNum + 1
-    local blast21 = Blast(tostring(blastNum),"spr/blast.png", self.position.x - wingW2 - 7,  self.position.y + wingH2 , 2, 0.05, self.position.x, self.position.y)
+    local blast21 = Blast(tostring(blastNum),"spr/blast3.png", self.position.x - wingW2 - 7,  self.position.y + wingH2 , 2, 0.02, self.position.x, self.position.y)
     table.insert(actorList, blast21)
     blastNum = blastNum + 1
-    local blast22 = Blast(tostring(blastNum),"spr/blast.png", self.position.x + wingW2,  self.position.y + wingH2 , 2, 0.05, self.position.x, self.position.y)
+    local blast22 = Blast(tostring(blastNum),"spr/blast3.png", self.position.x + wingW2,  self.position.y + wingH2 , 2, 0.02, self.position.x, self.position.y)
     table.insert(actorList, blast22)
     self.timer = 0
   end

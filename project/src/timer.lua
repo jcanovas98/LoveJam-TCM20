@@ -9,14 +9,11 @@ function Timer:new(time, fun)
 end
 
 function Timer:update(dt)
-  self.actualT = self.actualT + dt
-  if self.actualT > self.maxT then
+  self.ActualT = self.ActualT + dt
+  if self.ActualT > self.MaxT then
     self.f()
     self.ActualT = 0
   end
-  
 end
-
-  
   
   return Timer

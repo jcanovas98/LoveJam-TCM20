@@ -4,12 +4,11 @@ local w, h = love.graphics.getDimensions()
 
 function Audio:new()
   gameover = love.audio.newSource("spr/gameOver.mp3", "static")
-  --[[
-  menuTrack = love.audio.newSource("spr/menuTrack.mp3", "stream")
-  track1 = love.audio.newSource("spr/track1.mp3", "stream")
-  track2 = love.audio.newSource("spr/track2.mp3", "stream")
-  click = love.audio.newSource("spr/click.mp3", "static")
-  --]]
+  menuTrack = love.audio.newSource("spr/menu_track.mp3", "stream")
+  track1 = love.audio.newSource("spr/track_1.mp3", "stream")
+  track2 = love.audio.newSource("spr/track_2.mp3", "stream")
+  click = love.audio.newSource("spr/click_sound.mp3", "static")
+  shoot = love.audio.newSource("spr/shoot_sound.mp3", "static")
 end
 
 function Audio:update(dt)
@@ -24,7 +23,6 @@ end
 function Audio:getGameover()
   return gameover
 end
---[[
 function Audio:getMenuTrack()
   return menuTrack
 end
@@ -40,6 +38,9 @@ end
 function Audio:getClick()
   return click
 end
---]]
+
+function Audio:getShoot()
+  return shoot
+end
 
 return Audio

@@ -1,5 +1,6 @@
 local Object = Object or require "lib/classic"
 local Timer = Timer or require "src/timer"
+local Audio = Audio or require "src/audio"
 local Menu = Object:extend()
 
 local w, h = love.graphics.getDimensions()
@@ -19,15 +20,20 @@ local interfaceSprite = love.graphics.newImage("spr/interface.png")
 local t = timer(3, function() transition = true end)
 
 function Menu:new()
-  table.insert(buttons, Menu:newButton(" Start", function() startGame = true end))
-  table.insert(buttons, Menu:newButton("Options", function() startGame = true end))
+  table.insert(buttons, Menu:newButton(" Start", function() startGame = true, clickSound:play() end))
+  table.insert(buttons, Menu:newButton("Options", function() startGame = true clickSound:play() end))
   table.insert(buttons, Menu:newButton("   Exit", function() love.event.quit(0) end))
   self.image = background
   asteroidRot = 0
+  
+  audio = Audio()
+  clickSound = audio:getClick()
+  menuTrack = audio:getMenuTrack()
 end
 
 
 function Menu:update(dt)
+  menuTrack:play()
   asteroidRot = asteroidRot + 1 * dt
   if (startGame) then
     t:update(dt)
