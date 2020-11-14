@@ -1,5 +1,6 @@
 local Object = Object or require "lib/classic"
 local Timer = Timer or require "src/timer"
+local Audio = Audio or require "src/audio"
 local Menu = Object:extend()
 
 local w, h = love.graphics.getDimensions()
@@ -37,6 +38,7 @@ end
 
 
 function Menu:update(dt)
+  menuTrack:play()
   asteroidRot = asteroidRot + 1 * dt
   if (startGame) then
     t:update(dt)
