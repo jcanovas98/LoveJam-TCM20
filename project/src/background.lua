@@ -11,7 +11,7 @@ function Background:new(speed)
   self.varW = 0
 end
 
-function Background:update(dt)
+function Background:update(dt)    
   --speed
   for i = 1, #self.lines do
     self.lines[i] = self.lines[i] + self.speed * dt

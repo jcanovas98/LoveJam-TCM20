@@ -16,6 +16,7 @@ function Player:new(image,x,y,speed,iscale)
   self.position = Vector.new(x or 0, y or 0)
   self.scale = Vector.new(1,1)
   self.forward = Vector.new(0, 0)
+  self.health = 3
   self.speed = speed or 30
   self.image = love.graphics.newImage(image or nil)
   self.iscale = iscale
@@ -23,13 +24,21 @@ function Player:new(image,x,y,speed,iscale)
   self.height = self.image:getHeight() * iscale
   self.width  = self.image:getWidth() * iscale
   self.timer = 0
+  self.chargeShield = false
+  self.activateShield = false
+  self.chargeSpeed = false
+  self.activateSpeed = false
 end
 
 function Player:update(dt, actorList)
   --Movement
   if love.keyboard.isDown("s") then
     self.forward.y = self.forward.y + 0.1
-    self.image = love.graphics.newImage("spr/xwing1.png")
+    if self.activateSpeed then
+      self.image = love.graphics.newImage("spr/xwing1_boost.png")
+    else
+      self.image = love.graphics.newImage("spr/xwing1.png")
+    end
   elseif love.keyboard.isDown("w") then
     self.forward.y = self.forward.y - 0.1
   else
@@ -40,15 +49,27 @@ function Player:update(dt, actorList)
     elseif self.forward.y < 0 then
       self.forward.y = self.forward.y + 0.2
     end
-    self.image = love.graphics.newImage("spr/xwing2.png")
+    if self.activateSpeed then
+      self.image = love.graphics.newImage("spr/xwing2_boost.png")
+    else
+      self.image = love.graphics.newImage("spr/xwing2.png")
+    end
   end
   
   if love.keyboard.isDown("d") then
     self.forward.x = self.forward.x + 0.1
-        self.image = love.graphics.newImage("spr/xwing3i.png")
+    if self.activateSpeed then
+      self.image = love.graphics.newImage("spr/xwing3i_boost.png")
+    else
+      self.image = love.graphics.newImage("spr/xwing3i.png")
+    end
   elseif love.keyboard.isDown("a") then
     self.forward.x = self.forward.x - 0.1
-        self.image = love.graphics.newImage("spr/xwing3d.png")
+    if self.activateSpeed then
+      self.image = love.graphics.newImage("spr/xwing3d_boost.png")
+    else
+      self.image = love.graphics.newImage("spr/xwing3d.png")
+    end
   else
     if self.forward.x < 0.2 and self.forward.x > -0.2 then
       self.forward.x = 0
@@ -86,6 +107,9 @@ function Player:update(dt, actorList)
   end
   self.position = self.position + self.forward * self.speed * dt
   
+  --Activate PowerUps--
+  self:UsePowerups(powerupHud)
+  
 end
 
 function Player:draw()
@@ -108,6 +132,26 @@ function Player:draw()
   end
   love.graphics.setColor(1, 1, 1)
   love.graphics.draw(self.image, self.position.x, self.position.y, 0, self.iscale, self.iscale, self.origin.x, self.origin.y)
+end
+
+function Player:UsePowerups(powerupHud)
+  function love.keypressed(key)
+    if key == "h" then
+      self.health = self.health - 1
+    end
+    if key == "j" and not self.activateShield then
+      self.chargeShield = true
+    end
+    if key == "k" and not self.activateSpeed then
+      self.chargeSpeed = true
+    end
+    if key == "q" and powerupHud.shieldAngle == 270 then
+      self.activateShield = true
+    end
+    if key == "e" and powerupHud.speedAngle == 270 then
+      self.activateSpeed = true
+    end
+  end
 end
 
 return Player

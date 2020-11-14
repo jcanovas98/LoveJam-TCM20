@@ -1,8 +1,9 @@
 local Object = Object or require "lib.classic"
 local Vector = Vector or require "src/vector"
+local Player = Player or require "src/player"
+local PowerupHud = PowerupHud or require "src/powerupHud"
 local Enemy = Object:extend()
 local w, h = love.graphics.getDimensions()
-
 
 function Enemy:new(num,image,x,y,time,iscale)
   self.tag = "enemy"..num
@@ -45,7 +46,7 @@ function Enemy:update(dt, actorList)
   self.height = self.image:getHeight() * self.iscale
   self.width  = self.image:getWidth() * self.iscale
   
-  self:playerCollision(dt, actorList)
+  self:playerCollision(dt, actorList, powerupHud)
   
   if self.depthR >= 0.99 then --screen end collision
     self:destroy(actorList)
@@ -73,6 +74,12 @@ function Enemy:blastCollision(dt, actorList)
         if self.position.x + self.width/2 > v.position.x and self.position.x < v.position.x + v.width/2 and 
         self.position.y + self.height/2 > v.position.y and self.position.y < v.position.y + v.height/2 then
           table.remove(actorList, _) --remove blast
+          if not player.activateShield then
+            player.chargeShield = true
+          end
+          if not player.activateSpeed then
+            player.chargeSpeed = true
+          end
           self.destroyD = true
         end
       end
@@ -84,13 +91,19 @@ function Enemy:blastCollision(dt, actorList)
   end
 end
 
-function Enemy:playerCollision(dt, actorList)
+function Enemy:playerCollision(dt, actorList, powerupHud)
   if self.depthR >= 0.85 and self.depthR < 0.99 then
     for _,v in ipairs(actorList) do
       if v.tag == "player" then
         if self.position.x + self.width/2 > v.position.x and self.position.x < v.position.x + v.width/2 and 
         self.position.y + self.height/2 > v.position.y and self.position.y < v.position.y + v.height/2 then
           self:destroy(actorList) --remove meteor
+          if not player.activateShield then
+            player.health = player.health - 1
+          else
+            player.activateShield = false
+            powerupHud.shieldAngle = -90
+          end
       end
     end
   end
