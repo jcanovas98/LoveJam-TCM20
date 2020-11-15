@@ -12,19 +12,20 @@ local horizontalMov = false
 local allDestroyed = false
 local explosionTimer = 0
 local healthTimer = 0
+local font
 
 
 function FinalBoss:new(image,x,y,scale)
-  self.health1 = 3
+  self.health1 = 0
   self.healthAngle1 = -90
 
-  self.health2 = 3
+  self.health2 = 0
   self.healthAngle2 = -90
 
-  self.health3 = 3
+  self.health3 = 0
   self.healthAngle3 = -90
 
-  self.health4 = 3
+  self.health4 = 0
   self.healthAngle4 = -90
   
   self.dimension = scale
@@ -183,6 +184,13 @@ function FinalBoss:draw()
   self:drawHealth(self.healthAngle2, self.position.x + 90, self.position.y + 20)
   self:drawHealth(self.healthAngle3, self.position.x + 200, self.position.y + 25)
   self:drawHealth(self.healthAngle4, self.position.x + 300, self.position.y + 30)
+  
+  font = love.graphics.newFont("Starjedi.ttf", 50) 
+  
+  if self.health1 == 0 and self.health2 == 0 and self.health3 == 0 and self.health4 == 0 then
+        
+        love.graphics.print("mission complete", font, w/4, h-100)
+      end
   
 end
 
