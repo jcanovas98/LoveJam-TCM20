@@ -10,6 +10,8 @@ local HealthHud = HealthHud or require "src/healthHud"
 local ScoreHud = ScoreHud or require "src/scoreHud"
 local GameOver = GameOver or require "src/gameover"
 local Menu = Menu or require "src/menu"
+local BossRoom = BossRoom or require "src/bossRoom"
+local FinalBoss = FinalBoss or require "src/finalBoss"
 local actorList = {}
 
 local shield = Shield()
@@ -22,12 +24,18 @@ function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end -- Enable the debugging with ZeroBrane Studio
   
   --menu = Menu()
-  gameOver = GameOver()
-  local background = Background(100)
-  table.insert(actorList, background)
+  --gameOver = GameOver()
+  --local background = Background(100)
+  --table.insert(actorList, background)
   
-  local enemy1 = Enemy("1","spr/Meteor1.png", w/2 - 100, h - 100, 10, 0.5)
-  table.insert(actorList, enemy1)
+  bossRoom = BossRoom()
+  --table.insert(actorList, bossRoom)
+  
+  finalBoss = FinalBoss("spr/boss_sprite.png",w/3,h/2,1/2)
+  table.insert(actorList, finalBoss)
+  
+  --local enemy1 = Enemy("1","spr/Meteor1.png", w/2 - 100, h - 100, 10, 0.5)
+ -- table.insert(actorList, enemy1)
   
   player = Player("spr/xwing2.png", w/2, h - h/4, 100, 0.75)
   table.insert(actorList, player)--]]
@@ -41,6 +49,7 @@ function love.update(dt)
     v:update(dt, actorList)
   end
 
+  bossRoom:update(dt, finalBoss:getAllDestroyed())
   shield:update(dt, player)
   powerupHud:update(dt, player)
   healthHud:update(dt, player)
@@ -51,11 +60,12 @@ end
 function love.draw()
   --menu:draw()
   --gameOver:draw()
+  bossRoom:draw()
   for _,v in ipairs(actorList) do
     v:draw()
   end
   
-
+  
   shield:draw()
   powerupHud:draw()
   healthHud:draw()
