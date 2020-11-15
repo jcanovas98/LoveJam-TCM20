@@ -22,13 +22,13 @@ local IntroCampaign = IntroCampaign or require "src/introCampaña"
 local actorListEndless = {}
 local actorListBoss = {}
 
-local isIntro = true
+local isIntro = false
 local isMenu = false
 local isIntroCampaign = false
 
 local isEndless = false
-local isCampaign = false
-local isBoss = false
+local isCampaign = true
+local isBoss = true
 local isGameover = false
 local isPause = false
 local gameStatus = 0 -- PARA GAMEOVER: 0 ENDLESS, 1 CAMPAIGN, 2 BOSS
@@ -232,6 +232,12 @@ function love.update(dt)
         v:update(dt, actorListBoss)
       end
       bossRoom:update(dt, finalBoss:getAllDestroyed())
+      if bossRoom:getGameOver() then
+        isCampaign = false
+        isBoss = false
+        isGameover = true
+      end
+      
     end
     end
   end
@@ -310,6 +316,7 @@ function love.draw()
   
   
   if (isCampaign) then
+    
     if not isBoss then
       for _,v in ipairs(actorListEndless) do
         v:draw()
@@ -330,14 +337,20 @@ function love.draw()
     end
     
     if isBoss then
+      if (finalBoss:getAllDestroyed()) then
+          bossRoom:draw()
+        end
       for _,v in ipairs(actorListBoss) do
         v:draw()
+        
       end
+      
     end
     shield:draw()
     powerupHud:draw()
     healthHud:draw()
     scoreHud:draw()
+    
   end
   
   if (isEndless) then

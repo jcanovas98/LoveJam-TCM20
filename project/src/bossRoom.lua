@@ -18,6 +18,7 @@ function BossRoom:new(speed)
   self.endingTimer = 0
   self.ending = false
   self.tag = "bossRoom"
+  self.gameover = false
 end
 
 function BossRoom:update(dt, allDestroyed)
@@ -40,7 +41,7 @@ function BossRoom:draw()
   love.graphics.draw(self.bossRoomImage)
   love.graphics.draw(self.hudImage, 0, -20, 0)
   
-  if allDestroyed then
+  
     if self.ending then
       if self.endingTimer > 1 then
         love.graphics.setColor(1,1,1,self.alpha1)
@@ -69,9 +70,15 @@ function BossRoom:draw()
         love.graphics.setColor(1,1,1)
         love.graphics.draw(self.venator, 450, 150)
         love.graphics.draw(self.venator, 390, 320)
-        end
+      end
+      if self.endingTimer > 6 then
+        self.gameOver = true
+      end
+      
+      
+      
     end
-  end
+  
 end
 
 function BossRoom:NewAnimation(image, width, height, duration)
@@ -89,6 +96,10 @@ function BossRoom:NewAnimation(image, width, height, duration)
     animation.currentTime = 0
  
     return animation
+end
+
+function BossRoom:getGameOver()
+  return self.gameOver
 end
 
 return BossRoom
