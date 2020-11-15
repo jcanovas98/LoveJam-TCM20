@@ -2,7 +2,7 @@ local Object = Object or require "lib.classic"
 local ScoreHud = Object:extend()
 local w, h = love.graphics.getDimensions(5)
 --local file = io.open("savegame.txt", "r+")
-local score
+
 local loadScore
 
 
@@ -25,7 +25,7 @@ function ScoreHud:new()
 end
 
 function ScoreHud:update(dt)
-  self.score = self.score + dt * 1
+  self.score = self.score + dt * 2
   
   if self.score > tonumber(loadScore) then
     self:saveScore()

@@ -5,6 +5,7 @@ local Player = Player or require "src/player"
 local Explosion = Explosion or require "src/explosion"
 local Audio = Audio or require "src/audio"
 local PowerupHud = PowerupHud or require "src/powerupHud"
+local ScoreHud = ScoreHud or require "src/scoreHud"
 local EnemyBullet = EnemyBullet or require "src/enemyBullet"
 local Enemy = Object:extend()
 local w, h = love.graphics.getDimensions()
@@ -47,7 +48,7 @@ function Enemy:new(tag,image,x,y,time,iscale,actorList)
   self.bulletTimer = 0
 end
 
-function Enemy:update(dt, actorList)  
+function Enemy:update(dt, actorList)
   self.position = self.position + self.forward * self.speed * dt
   
   self.distM = self.dist - math.sqrt(math.pow(self.xF - self.position.x, 2) + math.pow(self.yF - self.position.y, 2))
@@ -63,7 +64,7 @@ function Enemy:update(dt, actorList)
     self:destroy(actorList)
     player.health = player.health - 1
   end
-  self:blastCollision(dt,actorList)
+  self:blastCollision(dt,actorList, scoreHud)
   
   --self:playerFollow(dt, actorList)
   
@@ -89,7 +90,7 @@ function Enemy:draw()
   love.graphics.setColor(1,1,1)
 end
 
-function Enemy:blastCollision(dt, actorList)
+function Enemy:blastCollision(dt, actorList, scoreHud)
   for _,v in ipairs(actorList) do
     if v.tag:sub(1,5) == "blast" then
       if math.abs(1 - v.depthR - self.depthR) <= 0.2 then
@@ -102,6 +103,7 @@ function Enemy:blastCollision(dt, actorList)
           if not player.activateSpeed then
             player.chargeSpeed = true
           end
+          scoreHud.score = scoreHud.score + 100
           local explosion = Explosion(self.position.x, self.position.y)
           actorList[#actorList + 1] = explosion
           self.destroyD = true

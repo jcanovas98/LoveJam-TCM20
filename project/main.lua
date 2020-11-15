@@ -31,9 +31,9 @@ local introTimer = 0
 
 local music = Audio()
 local shield = Shield()
-local powerupHud = PowerupHud()
+powerupHud = PowerupHud()
 local healthHud = HealthHud()
-local scoreHud = ScoreHud()
+scoreHud = ScoreHud()
 local menu = Menu()
 local gameover = Gameover()
 
