@@ -23,6 +23,7 @@ function PowerupHud:update(dt, player)
   if player.activateShield then
     self.shieldAngle = self.shieldAngle - 1
     if(self.shieldAngle == -90) then
+      player.invuln = true
       player.activateShield = false
     end
   end

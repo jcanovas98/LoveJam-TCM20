@@ -25,7 +25,7 @@ function ScoreHud:new()
 end
 
 function ScoreHud:update(dt)
-  self.score = self.score + dt * 3
+  self.score = self.score + dt * 1
   
   if self.score > tonumber(loadScore) then
     self:saveScore()
@@ -35,7 +35,7 @@ end
 function ScoreHud:draw()
  -- love.graphics.setColor(1, 0.8, 0)
  love.graphics.setColor(256,256,256)
-  love.graphics.print("score: "..math.floor(self.score), w - 230, 20 ,0,1/4,1/4)
+  love.graphics.print("data: "..math.floor(self.score), w - 230, 20 ,0,1/4,1/4)
   love.graphics.print("record: "..math.floor(loadScore), w - 230, 60 ,0,1/4,1/4)
   love.graphics.setColor(1, 1, 1)
 end
