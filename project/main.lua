@@ -14,6 +14,7 @@ local HealthHud = HealthHud or require "src/healthHud"
 local ScoreHud = ScoreHud or require "src/scoreHud"
 local Gameover = Gameover or require "src/gameover"
 local Menu = Menu or require "src/menu"
+local PauseMenu = PauseMenu or require "src/pauseMenu"
 local BossRoom = BossRoom or require "src/bossRoom"
 local FinalBoss = FinalBoss or require "src/finalBoss"
 local TextBoxes = TextBoxes or require "src/textBoxes"
@@ -28,6 +29,7 @@ local isEndless = false
 local isCampaign = false
 local isBoss = false
 local isGameover = false
+local isPause = false
 local gameStatus = 0 -- PARA GAMEOVER: 0 ENDLESS, 1 CAMPAIGN, 2 BOSS
 
 local introTimer = 0
@@ -39,6 +41,7 @@ local healthHud = HealthHud()
 scoreHud = ScoreHud()
 local menu = Menu()
 local gameover = Gameover()
+local pause = PauseMenu()
 local textBox = TextBoxes(love.graphics.newImage("spr/comandante.jpg"), 3, "hola")
 
 local actorLength 
@@ -154,7 +157,20 @@ function love.update(dt)
     IntroCampaign:update(dt)
   end
   if(isCampaign) then
-    --update list
+    if(isPause) then
+      if love.keyboard.isDown ("return") then
+        isPause = false
+      end
+      if love.keyboard.isDown ("escape") then
+      love.event.quit(0)
+      end
+    end
+    
+    if not isPause then 
+      if love.keyboard.isDown ("p") then
+        isPause = true
+      end
+      
     shield:update(dt, player)
     powerupHud:update(dt, player)
     healthHud:update(dt, player)
@@ -202,9 +218,24 @@ function love.update(dt)
       end
       bossRoom:update(dt, finalBoss:getAllDestroyed())
     end
+    end
   end
   
   if (isEndless) then
+    if(isPause) then
+    if love.keyboard.isDown ("return") then
+      isPause = false
+      end
+    if love.keyboard.isDown ("escape") then
+      love.event.quit(0)
+      end
+    end
+    
+    if not isPause then 
+      if love.keyboard.isDown ("p") then
+        isPause = true
+      end
+      
     gameStatus = 0
     shield:update(dt, player)
     powerupHud:update(dt, player)
@@ -230,7 +261,9 @@ function love.update(dt)
       isGameover = true
       isEndless = false
     end
+    end
   end
+
 end
 
 function love.draw()
@@ -272,6 +305,7 @@ function love.draw()
   end
   
   if (isEndless) then
+    
     for _,v in ipairs(actorListEndless) do
       v:draw()
     end
@@ -280,6 +314,12 @@ function love.draw()
     powerupHud:draw()
     healthHud:draw()
     scoreHud:draw()
+  end
+  
+  if (isPause) then
+      pause:draw()
+    end
+end
     textBox:draw()
   end
 end
