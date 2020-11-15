@@ -66,7 +66,10 @@ function love.load(arg)
   table.insert(actorListEndless, background)
   table.insert(actorListBoss, background)
 
-  enemySpawner = EnemySpawner(6, actorListEndless)
+  enemySpawner1 = EnemySpawner(6, actorListEndless, 1)
+  enemySpawner2 = EnemySpawner(4, actorListEndless, 2)
+  enemySpawner3 = EnemySpawner(3, actorListEndless, 3)
+  enemySpawner4 = EnemySpawner(2, actorListEndless, 4)
   
   bossRoom = BossRoom()
   table.insert(actorListBoss, bossRoom)
@@ -185,7 +188,7 @@ function love.update(dt)
     elseif random == 1 then
       track2:play()
     end
-
+      
     if scoreHud:getScore() > 2020 then
       --BOSS TRIGGER THINGS
       isBoss = true
@@ -196,8 +199,17 @@ function love.update(dt)
     
     if not isBoss then
       gameStatus = 1
-      enemySpawner:update(dt)
       
+      if scoreHud.difficultySpike == 1 then
+        enemySpawner1:update(dt)
+      elseif scoreHud.difficultySpike == 2 then
+        enemySpawner2:update(dt)
+      elseif scoreHud.difficultySpike == 3 then
+        enemySpawner3:update(dt)
+      elseif scoreHud.difficultySpike == 4 then
+        enemySpawner4:update(dt)
+      end
+        
       if random == 2 then
         track1:play()
       elseif random == 1 then
@@ -246,8 +258,16 @@ function love.update(dt)
     scoreHud:update(dt)
     player:UsePowerups(powerupHud)
     textBox:update(dt)
-  
-    enemySpawner:update(dt)
+    
+    if scoreHud.difficultySpike == 1 then
+      enemySpawner1:update(dt)
+    elseif scoreHud.difficultySpike == 2 then
+      enemySpawner2:update(dt)
+    elseif scoreHud.difficultySpike == 3 then
+      enemySpawner3:update(dt)
+    elseif scoreHud.difficultySpike == 4 then
+      enemySpawner4:update(dt)
+    end
       
     if random == 2 then
       track1:play()
@@ -259,7 +279,6 @@ function love.update(dt)
       v:update(dt, actorListEndless)
     end
     
-    print(player:getHealth())
     if player:getHealth() == 0 then
       isGameover = true
       isEndless = false
@@ -292,7 +311,17 @@ function love.draw()
       for _,v in ipairs(actorListEndless) do
         v:draw()
       end
-      enemySpawner:draw()
+      
+      if scoreHud.difficultySpike == 1 then
+        enemySpawner1:draw()
+      elseif scoreHud.difficultySpike == 2 then
+        enemySpawner2:draw()
+      elseif scoreHud.difficultySpike == 3 then
+        enemySpawner3:draw()
+      elseif scoreHud.difficultySpike == 4 then
+        enemySpawner4:draw()
+      end
+
       textBox:draw()
       
     end
@@ -312,7 +341,17 @@ function love.draw()
     for _,v in ipairs(actorListEndless) do
       v:draw()
     end
-    enemySpawner:draw()
+    
+    if scoreHud.difficultySpike == 1 then
+      enemySpawner1:draw()
+    elseif scoreHud.difficultySpike == 2 then
+      enemySpawner2:draw()
+    elseif scoreHud.difficultySpike == 3 then
+      enemySpawner3:draw()
+    elseif scoreHud.difficultySpike == 4 then
+      enemySpawner4:draw()
+    end
+    
     shield:draw()
     powerupHud:draw()
     healthHud:draw()

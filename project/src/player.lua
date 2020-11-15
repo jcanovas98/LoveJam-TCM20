@@ -39,9 +39,6 @@ end
 
 function Player:update(dt, actorList)
   --Movement
-  print(self.health) 
-  print(self.invuln)
-  
   if love.keyboard.isDown("s") then
     self.forward.y = self.forward.y + 0.1
     if self.activateSpeed then

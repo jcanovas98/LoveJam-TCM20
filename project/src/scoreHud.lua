@@ -18,14 +18,23 @@ function ScoreHud:new()
 
   loadScore = self.saveGame[1]
   
-  self.score = 2015
+  self.score = 0
+  self.difficultySpike = 1
   
   font = love.graphics.newFont("Starjedi.ttf",100)
   love.graphics.setFont(font)
 end
 
 function ScoreHud:update(dt)
-  self.score = self.score + dt * 2
+  self.score = self.score + dt * 10
+  
+  if self.score >= 500 and self.difficultySpike == 1 then
+    self.difficultySpike = self.difficultySpike + 1
+  elseif self.score >= 1000 and self.difficultySpike == 2 then
+    self.difficultySpike = self.difficultySpike + 1
+  elseif self.score >= 1500 and self.difficultySpike == 3 then
+    self.difficultySpike = self.difficultySpike + 1
+  end
   
   if self.score > tonumber(loadScore) then
     self:saveScore()
