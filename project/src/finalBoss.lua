@@ -11,11 +11,6 @@ local laserDelay = 0.3
 local horizontalMov = false
 local allDestroyed = false
 local explosionTimer = 0
-local explosion1 = false
-local explosion2 = false
-local explosion3 = false
-local explosion4 = false
-local explosion = nil
 
 
 function FinalBoss:new(image,x,y,scale)
