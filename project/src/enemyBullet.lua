@@ -49,7 +49,7 @@ function EnemyBullet:update(dt, actorList)
   
   self:playerCollision(dt, actorList, powerupHud)
   
-  if self.depthR >= 0.99 then --screen end collision
+  if self.depthR >= 0.98 then --screen end collision
     self:destroy(actorList)
   end
 end
@@ -74,7 +74,7 @@ function EnemyBullet:playerCollision(dt, actorList)
         if self.position.x + self.width/2 > v.position.x and self.position.x < v.position.x + v.width/2 and 
         self.position.y + self.height/2 > v.position.y and self.position.y < v.position.y + v.height/2 then
           self:destroy(actorList) --remove meteor
-                    if not player.activateShield then
+          if not player.activateShield then
             player.health = player.health - 1
           else
             player.activateShield = false

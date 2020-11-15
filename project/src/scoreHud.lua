@@ -25,7 +25,7 @@ function ScoreHud:new()
 end
 
 function ScoreHud:update(dt)
-  self.score = self.score + dt * 3
+  self.score = self.score + dt * 1
   
   if self.score > tonumber(loadScore) then
     self:saveScore()

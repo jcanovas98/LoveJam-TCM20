@@ -124,7 +124,7 @@ function FinalBoss:update(dt, actorList)
         end
         self.laserDone = self.laserDone + 1
         local explosion = Explosion(self.laserX, self.laserY)
-        table.insert(actorList, explosion)
+        actorList[#actorList + 1] = explosion
         
         self.expTimer = 0
         self.exploding = true
@@ -168,7 +168,7 @@ function FinalBoss:update(dt, actorList)
       end
     end
     self.lasers = Lasers(self.position.x, self.position.y, self.laserX, self.laserY, time, self.health1, self.health2, self.health3, self.health4)
-    table.insert(actorList, self.lasers)
+    actorList[#actorList + 1] = self.lasers
     self.spawnLaser = false
   end
   self.timer = self.timer + dt

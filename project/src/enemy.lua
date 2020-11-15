@@ -64,11 +64,10 @@ function Enemy:update(dt, actorList)
   
   if self.bulletTimer >= 1.5 then
     enemyBullet = EnemyBullet("enemyBullet","spr/blast3_verde.png",self.xF,self.yF,self.position.x,self.position.y,1,0.07,self.depthR)
-    table.insert(actorList, enemyBullet)
+    actorList[#actorList + 1] = enemyBullet
     self.bulletTimer = 0
   end
   self.bulletTimer =  self.bulletTimer + dt
-  print(self.depthR)
 end
 
 function Enemy:draw()
@@ -98,7 +97,7 @@ function Enemy:blastCollision(dt, actorList)
             player.chargeSpeed = true
           end
           local explosion = Explosion(self.position.x, self.position.y)
-          table.insert(actorList, explosion)
+          actorList[#actorList + 1] = explosion
           self.destroyD = true
         end
       end
@@ -117,8 +116,11 @@ function Enemy:playerCollision(dt, actorList, powerupHud)
         if self.position.x + self.width/2 > v.position.x and self.position.x < v.position.x + v.width/2 and 
         self.position.y + self.height/2 > v.position.y and self.position.y < v.position.y + v.height/2 then
           self:destroy(actorList) --remove meteor
+          local explosion = Explosion(self.position.x, self.position.y)
+          actorList[#actorList + 1] = explosion
           if not player.activateShield then
             player.health = player.health - 1
+            print("A")
           else
             player.activateShield = false
             powerupHud.shieldAngle = -90

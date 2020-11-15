@@ -90,17 +90,19 @@ function Player:update(dt, actorList)
     shootSound:play()
     
     blastNum = blastNum + 1 
+
     local blast11 = Blast(tostring(blastNum),"spr/blast3_rojo.png", self.position.x - wingW1 - 7,  self.position.y + wingH1 , 2, 0.04, self.position.x, self.position.y)
-    table.insert(actorList, blast11)
+    actorList[#actorList + 1] = blast11
     blastNum = blastNum + 1
     local blast12 = Blast(tostring(blastNum),"spr/blast3_rojo.png", self.position.x + wingW1,  self.position.y + wingH1 , 2, 0.04, self.position.x, self.position.y)
-    table.insert(actorList, blast12)
+    actorList[#actorList + 1] = blast12
     blastNum = blastNum + 1
     local blast21 = Blast(tostring(blastNum),"spr/blast3_rojo.png", self.position.x - wingW2 - 7,  self.position.y + wingH2 , 2, 0.04, self.position.x, self.position.y)
-    table.insert(actorList, blast21)
+    actorList[#actorList + 1] = blast21
     blastNum = blastNum + 1
     local blast22 = Blast(tostring(blastNum),"spr/blast3_rojo.png", self.position.x + wingW2,  self.position.y + wingH2 , 2, 0.04, self.position.x, self.position.y)
-    table.insert(actorList, blast22)
+
+    actorList[#actorList + 1] = blast22
     self.timer = 0
   end
   self.timer = self.timer + dt
