@@ -22,13 +22,13 @@ local IntroCampaign = IntroCampaign or require "src/introCampaña"
 local actorListEndless = {}
 local actorListBoss = {}
 
-local isIntro = false
+local isIntro = true
 local isMenu = false
 local isIntroCampaign = false
 
 local isEndless = false
-local isCampaign = true
-local isBoss = true
+local isCampaign = false
+local isBoss = false
 local isGameover = false
 local isPause = false
 local gameStatus = 0 -- PARA GAMEOVER: 0 ENDLESS, 1 CAMPAIGN, 2 BOSS
@@ -43,7 +43,14 @@ scoreHud = ScoreHud()
 local menu = Menu()
 local gameover = Gameover()
 local pause = PauseMenu()
-local textBox = TextBoxes(love.graphics.newImage("spr/comandante.jpg"), 3, "hola")
+local textBox = TextBoxes(love.graphics.newImage("spr/comandante2.jpg"), 3, "The imperials are blocking us! \n We must do an all-in strike \n to capture their flagship. \n The fleet is preparing, but... \n we need you to fly over their \n base and intercept their data \n to get the coordinates. \n We cannot fail at this, \n good luck Commander!")
+ 
+local textBox1 = TextBoxes(love.graphics.newImage("spr/comandante.jpg"), 1, "Seems that their \n T-Fighters are transmitting. \n Destroy them to gather \n data faster!")
+local textBox3 = TextBoxes(love.graphics.newImage("spr/comandante2.jpg"), 1, "We are receiving \n all data! \n Calculating coordinates!")
+local textBox4 = TextBoxes(love.graphics.newImage("spr/comandante3.jpg"), 1, "Main Command \n to all ships! \n Coordinates sent to all fleet! \n Jump at my signal!")
+local textBox5 = TextBoxes(love.graphics.newImage("spr/comandante3.jpg"), 1, "All ships! \n jump! jump! jump!")
+
+
 
 local actorLength 
 
@@ -122,11 +129,11 @@ function love.update(dt)
   
   if(isGameover) then
     gameover:update(dt)
+    bossTrack:stop()
     track1:stop()
     track2:stop()
     random = math.random(1,2)
     
-    print(gameover:getRetry())
     if gameover:getRetry() and gameStatus == 0 then
       isGameover = false
       isEndless = true
@@ -182,19 +189,12 @@ function love.update(dt)
     healthHud:update(dt, player)
     scoreHud:update(dt)
     player:UsePowerups(powerupHud)
+          
     
     if random == 2 then
       track1:play()
     elseif random == 1 then
       track2:play()
-    end
-      
-    if scoreHud:getScore() > 2020 then
-      --BOSS TRIGGER THINGS
-      isBoss = true
-      track1:stop()
-      track2:stop()
-      bossTrack:play()
     end
     
     if not isBoss then
@@ -202,14 +202,25 @@ function love.update(dt)
       
       if scoreHud.difficultySpike == 1 then
         enemySpawner1:update(dt)
+        textBox:update(dt)
       elseif scoreHud.difficultySpike == 2 then
         enemySpawner2:update(dt)
+        textBox1:update(dt)
       elseif scoreHud.difficultySpike == 3 then
         enemySpawner3:update(dt)
+        textBox3:update(dt)
       elseif scoreHud.difficultySpike == 4 then
         enemySpawner4:update(dt)
+        textBox4:update(dt)
       end
-        
+      textBox5:update(dt)
+      if scoreHud:getScore() > 2020 then
+      if love.keyboard.isDown ("j") then
+        isBoss = true
+      end
+      
+    end
+      
       if random == 2 then
         track1:play()
       elseif random == 1 then
@@ -227,6 +238,9 @@ function love.update(dt)
     end
     
     if isBoss then
+      track1:stop()
+      track2:stop()
+      bossTrack:play()
       gameStatus = 2
       for _,v in ipairs(actorListBoss) do
         v:update(dt, actorListBoss)
@@ -259,7 +273,6 @@ function love.update(dt)
     healthHud:update(dt, player)
     scoreHud:update(dt)
     player:UsePowerups(powerupHud)
-    textBox:update(dt)
     
     if scoreHud.difficultySpike == 1 then
       enemySpawner1:update(dt)
@@ -270,6 +283,8 @@ function love.update(dt)
     elseif scoreHud.difficultySpike == 4 then
       enemySpawner4:update(dt)
     end
+  
+    enemySpawner:update(dt)
       
     if random == 2 then
       track1:play()
@@ -320,22 +335,27 @@ function love.draw()
       
       if scoreHud.difficultySpike == 1 then
         enemySpawner1:draw()
+        textBox:draw()
       elseif scoreHud.difficultySpike == 2 then
         enemySpawner2:draw()
+        textBox1:draw()
       elseif scoreHud.difficultySpike == 3 then
         enemySpawner3:draw()
+        textBox3:draw()
       elseif scoreHud.difficultySpike == 4 then
         enemySpawner4:draw()
+        textBox4:draw()
       end
-
-      textBox:draw()
+    
+      if scoreHud:getScore() > 2020 then
+        textBox5:draw()
+        font = love.graphics.newFont("Starjedi.ttf", 100)
+        love.graphics.print("Press J to jump", font, w / 3 + 5 , h / 2 + 200, 0, 0.38, 0.38)
+      end
       
     end
     
     if isBoss then
-      if (finalBoss:getAllDestroyed()) then
-          bossRoom:draw()
-        end
       for _,v in ipairs(actorListBoss) do
         v:draw()
         

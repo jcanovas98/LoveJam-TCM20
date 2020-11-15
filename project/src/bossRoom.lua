@@ -42,7 +42,6 @@ function BossRoom:draw()
   love.graphics.draw(self.bossRoomImage)
   love.graphics.draw(self.hudImage, 0, -20, 0)
   font = love.graphics.newFont("Starjedi.ttf", 50)
-  
     if self.ending then
       if self.endingTimer > 1 then
         love.graphics.setColor(1,1,1,self.alpha1)

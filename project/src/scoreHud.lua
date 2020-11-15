@@ -20,6 +20,8 @@ function ScoreHud:new()
   
   self.score = 0
   self.difficultySpike = 1
+
+
   
   font = love.graphics.newFont("Starjedi.ttf",100)
   love.graphics.setFont(font)
@@ -61,6 +63,10 @@ end
 
 function ScoreHud:getScore()
   return self.score 
+end
+
+function ScoreHud:addScore(i)
+  self.score = self.score + i
 end
 
 

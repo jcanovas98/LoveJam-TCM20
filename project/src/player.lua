@@ -152,7 +152,7 @@ end
 
 function Player:UsePowerups(powerupHud)
   function love.keypressed(key)
-    if key == "h" then
+   --[[ if key == "h" then
       self.health = self.health - 1
     end
     if key == "j" and not self.activateShield and powerupHud.shieldAngle < 270  then
@@ -160,7 +160,7 @@ function Player:UsePowerups(powerupHud)
     end
     if key == "k" and not self.activateSpeed and powerupHud.speedAngle < 270 then
       self.chargeSpeed = true
-    end
+    end--]]
     if key == "q" and powerupHud.shieldAngle == 270 then
       self.activateShield = true
     end

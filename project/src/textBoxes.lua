@@ -8,17 +8,23 @@ local font
 local panelSprite = love.graphics.newImage("spr/panelSprite.png")
 local show = true
 local time
-local t = Timer()
+local t 
+--local t = Timer()
 
 function TextBoxes:new(image, time, text)
 self.image = image
 self.text = text
 self.time = time
-t:new(self.time, function() show = false end, 0)
+self.t = 0
+--t:new(self.time, function() show = false end, true)
 
 end
 function TextBoxes:update(dt)
-  t:update(dt)
+  self.t = self.t + dt
+  if self.t > self.time then
+    self.show = false
+  end
+  
 end
 
 function TextBoxes:draw()
@@ -27,10 +33,10 @@ function TextBoxes:draw()
 
   if (show) then
     love.graphics.setColor(1,1,1,0.8)
-    font = love.graphics.newFont("Glitch inside.otf", 16)
+    font = love.graphics.newFont("Starjedi.ttf", 15)
     love.graphics.draw(panelSprite, panelX, panelY, 0, 1, 1)
     love.graphics.draw(self.image, panelX+30, panelY+60, 0, 0.4, 0.4)
-    love.graphics.print(self.text, font, panelX+150, panelY+80)
+    love.graphics.print(self.text, font, panelX+120, panelY+50)
   end
 
   

@@ -16,16 +16,16 @@ local font
 
 
 function FinalBoss:new(image,x,y,scale)
-  self.health1 = 0
+  self.health1 = 3
   self.healthAngle1 = -90
 
-  self.health2 = 0
+  self.health2 = 3
   self.healthAngle2 = -90
 
-  self.health3 = 0
+  self.health3 = 3
   self.healthAngle3 = -90
 
-  self.health4 = 0
+  self.health4 = 3
   self.healthAngle4 = -90
   
   self.dimension = scale
