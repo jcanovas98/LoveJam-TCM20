@@ -232,11 +232,7 @@ function love.update(dt)
         v:update(dt, actorListBoss)
       end
       bossRoom:update(dt, finalBoss:getAllDestroyed())
-      if bossRoom:getGameOver() then
-        isCampaign = false
-        isBoss = false
-        isGameover = true
-      end
+      
       
     end
     end

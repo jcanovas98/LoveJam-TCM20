@@ -58,17 +58,15 @@ function Gameover:update(dt)
   self.timer = self.timer + dt
 end
 
-function Gameover:draw(complete)
+function Gameover:draw()
   love.graphics.setColor(256,256,256)
   local spriteNum1 = math.floor(self.animation.currentTime / self.animation.duration * #self.animation.quads) + 1
   love.graphics.draw(self.animation.spriteSheet, self.animation.quads[spriteNum1], 0, 0, 0, 3, 3)
   
   love.graphics.setColor(256,0,0, alpha1)
-  if (complete) then
-    love.graphics.print("mission complete", font1, w/6 - 60, h/3, 0, 1, 1)
-  else
+  
   love.graphics.print("mission failed", font1, w/6 - 60, h/3, 0, 1, 1)
-  end
+  
   
   love.graphics.setColor(256,256,256, alpha2)
   if self.timer > 4 then

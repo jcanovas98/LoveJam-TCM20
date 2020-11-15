@@ -28,6 +28,10 @@ end
 function Audio:getGameover()
   return gameover
 end
+
+function Audio:getComplete()
+  return win
+end
 function Audio:getMenuTrack()
   return menuTrack
 end

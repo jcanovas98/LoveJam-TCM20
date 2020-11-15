@@ -4,6 +4,7 @@ local FinalBoss = FinalBoss or require "src/finalBoss"
 local BossRoom = Object:extend()
 local w, h = love.graphics.getDimensions()
 local time = 0
+local font
 
 function BossRoom:new(speed)
   self.hudImage = love.graphics.newImage("spr/lowerHud.png")
@@ -40,7 +41,7 @@ end
 function BossRoom:draw()
   love.graphics.draw(self.bossRoomImage)
   love.graphics.draw(self.hudImage, 0, -20, 0)
-  
+  font = love.graphics.newFont("Starjedi.ttf", 50)
   
     if self.ending then
       if self.endingTimer > 1 then
@@ -71,8 +72,8 @@ function BossRoom:draw()
         love.graphics.draw(self.venator, 450, 150)
         love.graphics.draw(self.venator, 390, 320)
       end
-      if self.endingTimer > 6 then
-        self.gameOver = true
+      if self.endingTimer > 3 then
+        love.graphics.print("mission complete", font, w/4, h-100)
       end
       
       
