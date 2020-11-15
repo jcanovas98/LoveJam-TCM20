@@ -47,11 +47,12 @@ function EnemyBullet:update(dt, actorList)
   self.height = self.image:getHeight() * self.iscale
   self.width  = self.image:getWidth() * self.iscale
   
-  self:playerCollision(dt, actorList, powerupHud)
+  self:playerCollision(dt, actorList, powerupHud, player)
   
-  if self.depthR >= 0.98 then --screen end collision
+  if self.depthR >= 0.98 or self.depthR < 0 then --screen end collision
     self:destroy(actorList)
   end
+  
 end
 
 function EnemyBullet:draw()
@@ -67,15 +68,16 @@ function EnemyBullet:draw()
   love.graphics.setColor(1,1,1)
 end
 
-function EnemyBullet:playerCollision(dt, actorList)
+function EnemyBullet:playerCollision(dt, actorList, powerupHud, player)
   if self.depthR >= 0.85 and self.depthR < 0.99 then
     for _,v in ipairs(actorList) do
       if v.tag == "player" then
         if self.position.x + self.width/2 > v.position.x and self.position.x < v.position.x + v.width/2 and 
         self.position.y + self.height/2 > v.position.y and self.position.y < v.position.y + v.height/2 then
           self:destroy(actorList) --remove meteor
-          if not player.activateShield then
+          if not player.activateShield and not player.invuln then
             player.health = player.health - 1
+            player.invuln = true
           else
             player.activateShield = false
             powerupHud.shieldAngle = -90

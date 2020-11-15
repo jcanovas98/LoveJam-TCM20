@@ -47,8 +47,6 @@ function love.load(arg)
   --finalBoss = FinalBoss("spr/boss_sprite.png",w/3,h/2,1/2)
   --table.insert(actorList, finalBoss)
  
-  player = Player("spr/xwing2.png", w/2, h - h/4, 100, 0.75)
-  table.insert(actorList, player)--]]
   
   actorLength = #actorList
   
@@ -80,9 +78,12 @@ function love.draw()
   enemySpawner:draw()
   
   for _,v in ipairs(actorList) do
-    v:draw()
+    if v.tag ~= "player" then
+      v:draw()
+    end
   end
   
+  player:draw()
   shield:draw()
   powerupHud:draw()
   healthHud:draw()
