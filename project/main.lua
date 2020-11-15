@@ -16,11 +16,14 @@ local Gameover = Gameover or require "src/gameover"
 local Menu = Menu or require "src/menu"
 local BossRoom = BossRoom or require "src/bossRoom"
 local FinalBoss = FinalBoss or require "src/finalBoss"
+local TextBoxes = TextBoxes or require "src/textBoxes"
+local IntroCampaign = IntroCampaign or require "src/introCampaña"
 local actorListEndless = {}
 local actorListBoss = {}
 
-local isIntro = true
+local isIntro = false
 local isMenu = false
+local isIntroCampaign = true
 local isEndless = false
 local isCampaign = false
 local isBoss = false
@@ -36,6 +39,7 @@ local healthHud = HealthHud()
 scoreHud = ScoreHud()
 local menu = Menu()
 local gameover = Gameover()
+local textBox = TextBoxes(love.graphics.newImage("spr/comandante.jpg"), 3, "hola")
 
 local actorLength 
 
@@ -146,7 +150,9 @@ function love.update(dt)
     end
     
   end
-  
+  if (isIntroCampaign) then
+    IntroCampaign:update(dt)
+  end
   if(isCampaign) then
     --update list
     shield:update(dt, player)
@@ -205,6 +211,7 @@ function love.update(dt)
     healthHud:update(dt, player)
     scoreHud:update(dt)
     player:UsePowerups(powerupHud)
+    textBox:update(dt)
   
     enemySpawner:update(dt)
       
@@ -239,6 +246,11 @@ function love.draw()
     gameover:draw()
   end
   
+  if (isIntroCampaign) then
+    IntroCampaign:draw()
+  end
+  
+  
   if (isCampaign) then
     if not isBoss then
       for _,v in ipairs(actorListEndless) do
@@ -268,5 +280,6 @@ function love.draw()
     powerupHud:draw()
     healthHud:draw()
     scoreHud:draw()
+    textBox:draw()
   end
 end
