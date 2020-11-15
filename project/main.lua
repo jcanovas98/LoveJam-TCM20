@@ -291,6 +291,9 @@ end
 function love.draw()
   if (isIntro) then
     intro:draw()
+    font = love.graphics.newFont("Starjedi.ttf", 20)
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.print("Press ESC if you want to skip the intro", font, w/4 + 10, 700)
   end
   
   if (isMenu) then
