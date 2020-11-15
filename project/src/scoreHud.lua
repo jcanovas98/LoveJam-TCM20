@@ -18,7 +18,7 @@ function ScoreHud:new()
 
   loadScore = self.saveGame[1]
   
-  self.score = 0
+  self.score = 2015
   
   font = love.graphics.newFont("Starjedi.ttf",100)
   love.graphics.setFont(font)
@@ -33,8 +33,7 @@ function ScoreHud:update(dt)
 end
 
 function ScoreHud:draw()
- -- love.graphics.setColor(1, 0.8, 0)
- love.graphics.setColor(256,256,256)
+  love.graphics.setColor(256,256,256)
   love.graphics.print("data: "..math.floor(self.score), w - 230, 20 ,0,1/4,1/4)
   love.graphics.print("record: "..math.floor(loadScore), w - 230, 60 ,0,1/4,1/4)
   love.graphics.setColor(1, 1, 1)
@@ -50,5 +49,10 @@ end
 function ScoreHud:resetScoreHud()
   self.score = 0
 end
+
+function ScoreHud:getScore()
+  return self.score 
+end
+
 
 return ScoreHud

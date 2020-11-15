@@ -129,10 +129,6 @@ function Player:update(dt, actorList)
     self.forward.x = 0
   end
   self.position = self.position + self.forward * self.speed * dt
-  
-  --Activate PowerUps--
-  self:UsePowerups(powerupHud)
-  
 end
 
 function Player:draw()
@@ -176,5 +172,14 @@ function Player:UsePowerups(powerupHud)
     end
   end
 end
+
+function Player:getHealth()
+  return self.health
+end
+
+function Player:resetHealth()
+  self.health = 3
+end
+
 
 return Player

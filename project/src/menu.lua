@@ -6,7 +6,8 @@ local Menu = Object:extend()
 local w, h = love.graphics.getDimensions()
 local buttons = {}
 
-local startGame = false
+local startCampaign = false
+local startEndless = false
 local transition = false
 local optionsPanel = false
 local controlsPanel = false
@@ -22,12 +23,12 @@ local asteroids = love.graphics.newImage("spr/Asteroids.png")
 local buttonSprite = love.graphics.newImage("spr/button.png")
 local interfaceSprite = love.graphics.newImage("spr/interface.png")
 local panelSprite = love.graphics.newImage("spr/panelSprite.png")
-local t = timer(3, function() transition = true end)
+local t = timer(3, function() transition = true end, 0)
 
 
 function Menu:new()
-  table.insert(buttons, Menu:newButton(" start", function() startGame = true end))
-  table.insert(buttons, Menu:newButton("endless", function() startGame = true end))
+  table.insert(buttons, Menu:newButton(" start", function() self.startCampaign = true end))
+  table.insert(buttons, Menu:newButton("endless", function() self.startEndless = true end))
   table.insert(buttons, Menu:newButton(" options", self.options))
   table.insert(buttons, Menu:newButton("controls", self.controls))
   table.insert(buttons, Menu:newButton("  exit", function() love.event.quit(0) end))
@@ -35,27 +36,30 @@ function Menu:new()
   self.image = background
   asteroidRot = 0
   
+  tranImage = love.graphics.newImage("spr/transitionFrames.png")
+  tranImage:setFilter("nearest", "nearest") 
+  self.animation = self:NewAnimation(tranImage, 480, 253, 3)
 end
 
 
 function Menu:update(dt)
   menuTrack:play()
   asteroidRot = asteroidRot + 1 * dt
-  if (startGame) then
+  if (self.startCampaign or self.startEndless) then
+    self.animation.currentTime = self.animation.currentTime + dt
+    if self.animation.currentTime >= self.animation.duration then
+      self.animation.currentTime = self.animation.currentTime - self.animation.duration
+    end
     t:update(dt)
-    if alpha <= 3 then
+   if alpha <= 3 then
       alpha = alpha + 0.5*dt
     end
-  end
-  
-  
-  
     
-  
+  end
+
 end
 
 function Menu:draw()
-  
   love.graphics.draw(self.image, 0, 0, 0, 0.7, 1)
   love.graphics.draw(asteroids, w/2, h/2, math.rad(-30), 3, 3, 256, 144)
   
@@ -140,11 +144,11 @@ end
     
   end
   
-  if (startGame) then
-    
-    love.graphics.setColor(0,0,0,alpha)
+  if (self.startCampaign or self.startEndless) then
+    love.graphics.setColor(1,1,1,alpha)
     love.graphics.rectangle("fill", 0, 0, 1024, 768)
-    love.graphics.setColor(1,1,1,1)
+    local spriteNum1 = math.floor(self.animation.currentTime / self.animation.duration * #self.animation.quads) + 1
+    love.graphics.draw(self.animation.spriteSheet, self.animation.quads[spriteNum1], 0, 0, 0, 2.2, 3.2)
   end
   
   
@@ -158,9 +162,15 @@ function Menu:newButton(text, f)
   }
 end
 
-function Menu:getStartGame()
+function Menu:getStartCampaign()
   if (transition) then
-    return startGame
+    return self.startCampaign
+  end
+end
+
+function Menu:getStartEndless()
+  if (transition) then
+    return self.startEndless
   end
 end
 
@@ -178,6 +188,22 @@ function Menu:controls()
   end
 end
 
+function Menu:NewAnimation(image, width, height, duration)
+    local animation = {}
+    animation.spriteSheet = image;
+    animation.quads = {};
+ 
+    for y = 0, image:getHeight() - height, height do
+        for x = 0, image:getWidth() - width, width do
+            table.insert(animation.quads, love.graphics.newQuad(x, y, width, height, image:getDimensions()))
+        end
+    end
+ 
+    animation.duration = duration or 1
+    animation.currentTime = 0
+ 
+    return animation
+end
 
 
 return Menu

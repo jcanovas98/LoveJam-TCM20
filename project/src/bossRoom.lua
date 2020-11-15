@@ -21,7 +21,6 @@ end
 
 function BossRoom:update(dt, allDestroyed)
   if allDestroyed then
-
     self.ending = true
     self.endingTimer = self.endingTimer + dt
     if self.endingTimer > 1 then
@@ -33,46 +32,45 @@ function BossRoom:update(dt, allDestroyed)
     if self.endingTimer > 1.7 then
       self.alpha3 = self.alpha3 - dt
     end
-    
   end
-  
 end
 
 function BossRoom:draw()
   love.graphics.draw(self.bossRoomImage)
   love.graphics.draw(self.hudImage, 0, -20, 0)
   
-  if self.ending then
-    if self.endingTimer > 1 then
-      love.graphics.setColor(1,1,1,self.alpha1)
-      love.graphics.draw(self.jump1, -400, 120)
-    end
-    
-    if self.endingTimer > 1.3 then
-      love.graphics.setColor(1,1,1)
-      love.graphics.draw(self.venator, 90, 480)
+  if allDestroyed then
+    if self.ending then
+      if self.endingTimer > 1 then
+        love.graphics.setColor(1,1,1,self.alpha1)
+        love.graphics.draw(self.jump1, -400, 120)
       end
     
-    if self.endingTimer > 1.5 then
-      love.graphics.setColor(1,1,1,self.alpha2)
-      love.graphics.draw(self.jump2, 470 , 190)
-    end
+      if self.endingTimer > 1.3 then
+        love.graphics.setColor(1,1,1)
+        love.graphics.draw(self.venator, 90, 480)
+        end
     
-    if self.endingTimer > 1.7 then
-      love.graphics.setColor(1,1,1)
-      love.graphics.draw(self.battleship, 660, 320)
-      love.graphics.setColor(1,1,1, self.alpha3)
-      love.graphics.draw(self.jump1, -50, -180)
-      love.graphics.draw(self.jump1, -100, -9)
-    end
+      if self.endingTimer > 1.5 then
+        love.graphics.setColor(1,1,1,self.alpha2)
+        love.graphics.draw(self.jump2, 470 , 190)
+      end
+    
+      if self.endingTimer > 1.7 then
+        love.graphics.setColor(1,1,1)
+        love.graphics.draw(self.battleship, 660, 320)
+        love.graphics.setColor(1,1,1, self.alpha3)
+        love.graphics.draw(self.jump1, -50, -180)
+        love.graphics.draw(self.jump1, -100, -9)
+      end
   
-    if self.endingTimer > 2 then
-      love.graphics.setColor(1,1,1)
-      love.graphics.draw(self.venator, 450, 150)
-      love.graphics.draw(self.venator, 390, 320)
-      end
+      if self.endingTimer > 2 then
+        love.graphics.setColor(1,1,1)
+        love.graphics.draw(self.venator, 450, 150)
+        love.graphics.draw(self.venator, 390, 320)
+        end
+    end
   end
-  
 end
 
 function BossRoom:NewAnimation(image, width, height, duration)

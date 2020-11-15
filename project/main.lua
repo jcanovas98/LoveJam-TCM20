@@ -1,6 +1,8 @@
 local w, h = love.graphics.getDimensions()
 
 --actors
+local Intro = Intro or require "src/intro"
+local Audio = Audio or require "src/audio"
 local Player = Player or require "src/player"
 local Background = Background or require "src/background"
 local Enemy = Enemy or require "src/enemy"
@@ -10,17 +12,31 @@ local Shield = Shield or require "src/shield"
 local PowerupHud = PowerupHud or require "src/powerupHud"
 local HealthHud = HealthHud or require "src/healthHud"
 local ScoreHud = ScoreHud or require "src/scoreHud"
-local GameOver = GameOver or require "src/gameover"
+local Gameover = Gameover or require "src/gameover"
 local Menu = Menu or require "src/menu"
 local BossRoom = BossRoom or require "src/bossRoom"
 local FinalBoss = FinalBoss or require "src/finalBoss"
-local actorList = {}
+local actorListEndless = {}
+local actorListBoss = {}
 
+local isIntro = true
+local isMenu = false
+local isEndless = false
+local isCampaign = false
+local isBoss = false
+local isGameover = false
+local gameStatus = 0 -- PARA GAMEOVER: 0 ENDLESS, 1 CAMPAIGN, 2 BOSS
 
+local introTimer = 0
+
+local music = Audio()
 local shield = Shield()
-powerupHud = PowerupHud()
+local powerupHud = PowerupHud()
 local healthHud = HealthHud()
 local scoreHud = ScoreHud()
+local menu = Menu()
+local gameover = Gameover()
+
 local actorLength 
 
 function love.load(arg)
@@ -28,65 +44,219 @@ function love.load(arg)
   
   if arg[#arg] == "-debug" then require("mobdebug").start() end -- Enable the debugging with ZeroBrane Studio
   
-  --menu = Menu()
-  --gameOver = GameOver()
+  intro = Intro("spr/tecnocampusgames.ogv")
+  
+  random = math.random(1,2)
+  
+  track1 = music:getTrack1()
+  track2 = music:getTrack2()
+  menuTrack = music:getMenuTrack()
+  
 
   local background = Background(100)
-  table.insert(actorList, background)
+  table.insert(actorListEndless, background)
+  table.insert(actorListBoss, background)
 
-  --local background = Background(100)
-  --table.insert(actorList, background)
+  enemySpawner = EnemySpawner(6, actorListEndless)
+  
+  bossRoom = BossRoom()
+  table.insert(actorListBoss, bossRoom)
+  
+  finalBoss = FinalBoss("spr/boss_sprite.png",w/3,h/2,1/2)
+  table.insert(actorListBoss, finalBoss)
+  
   player = Player("spr/xwing2.png", w/2, h - h/4, 100, 0.75)
-  table.insert(actorList, player)--]]
+  table.insert(actorListEndless, player)
+  table.insert(actorListBoss, player)
   
-  enemySpawner = EnemySpawner(6, actorList)
   
-  --bossRoom = BossRoom()
-  --table.insert(actorList, bossRoom)
-  
-  --finalBoss = FinalBoss("spr/boss_sprite.png",w/3,h/2,1/2)
-  --table.insert(actorList, finalBoss)
- 
-  
-  actorLength = #actorList
+  actorLengthEndless = #actorListEndless
+  actorLengthBoss = #actorListBoss
   
 end
 function love.update(dt)
-  --menu:update(dt)
-  --gameOver:update(dt)
-  --update list
   
-  enemySpawner:update(dt)
-
-  for _,v in ipairs(actorList) do
-    v:update(dt, actorList)
+  if(isIntro) then
+    if love.keyboard.isDown ("escape") then
+      intro:stop()
+      introTimer = 20
+    end
+    
+    if introTimer > 19 then
+      isIntro = false
+      isMenu = true
+    end
+    introTimer = introTimer + dt
   end
-
-  --bossRoom:update(dt, finalBoss:getAllDestroyed())
-  shield:update(dt, player)
-  powerupHud:update(dt, player)
-  healthHud:update(dt, player)
-  scoreHud:update(dt)--]]
   
-end
-
-function love.draw()
-  --menu:draw()
-  --gameOver:draw()
-  --bossRoom:draw()
-
-  enemySpawner:draw()
+  if(isMenu) then
+    menu:update(dt)
+    menuTrack:play()
+    if menu:getStartCampaign() then
+      isMenu = false
+      isCampaign = true
+      menuTrack:stop()
+    end
+    
+    if menu:getStartEndless() then
+      isMenu = false
+      isEndless = true
+      menuTrack:stop()
+    end
+    
+  end
   
-  for _,v in ipairs(actorList) do
-    if v.tag ~= "player" then
-      v:draw()
+  if(isGameover) then
+    gameover:update(dt)
+    track1:stop()
+    track2:stop()
+    random = math.random(1,2)
+    
+    print(gameover:getRetry())
+    if gameover:getRetry() and gameStatus == 0 then
+      isGameover = false
+      isEndless = true
+      gameover:setRetry()
+      player:resetHealth()
+      scoreHud:resetScoreHud()
+      powerupHud:resetHud()
+    end
+    
+    if gameover:getRetry() and gameStatus == 1 then
+      isGameover = false
+      isCampaign = true
+      isBoss = false
+      gameover:setRetry()
+      gameover:setRetry()
+      player:resetHealth()
+      scoreHud:resetScoreHud()
+      powerupHud:resetHud()
+    end
+    
+    if gameover:getRetry() and gameStatus == 2 then
+      isGameover = false
+      isCampaign = true
+      isBoss = true
+      gameover:setRetry()
+      gameover:setRetry()
+      player:resetHealth()
+      scoreHud:resetScoreHud()
+      powerupHud:resetHud()
+    end
+    
+  end
+  
+  if(isCampaign) then
+    --update list
+    shield:update(dt, player)
+    powerupHud:update(dt, player)
+    healthHud:update(dt, player)
+    scoreHud:update(dt)
+    player:UsePowerups(powerupHud)
+
+    if scoreHud:getScore() > 2020 then
+      --BOSS TRIGGER THINGS
+      isBoss = true
+    end
+    
+    if not isBoss then
+      gameStatus = 1
+      enemySpawner:update(dt)
+      
+      if random == 2 then
+        track1:play()
+      elseif random == 1 then
+        track2:play()
+      end
+    
+      for _,v in ipairs(actorListEndless) do
+        v:update(dt, actorListEndless)
+      end
+    end
+    
+    if player:getHealth() == 0 then
+      isGameover = true
+      isCampaign = false
+    end
+    
+    if isBoss then
+      gameStatus = 2
+      for _,v in ipairs(actorListBoss) do
+        v:update(dt, actorListBoss)
+      end
+      bossRoom:update(dt, finalBoss:getAllDestroyed())
     end
   end
   
-  player:draw()
-  shield:draw()
-  powerupHud:draw()
-  healthHud:draw()
-  scoreHud:draw()
---]]
+  if (isEndless) then
+    gameStatus = 0
+    shield:update(dt, player)
+    powerupHud:update(dt, player)
+    healthHud:update(dt, player)
+    scoreHud:update(dt)
+    player:UsePowerups(powerupHud)
+  
+    enemySpawner:update(dt)
+      
+    if random == 2 then
+      track1:play()
+    elseif random == 1 then
+      track2:play()
+    end
+    
+    for _,v in ipairs(actorListEndless) do
+      v:update(dt, actorListEndless)
+    end
+    
+    print(player:getHealth())
+    if player:getHealth() == 0 then
+      isGameover = true
+      isEndless = false
+    end
+  end
+end
+
+function love.draw()
+  if (isIntro) then
+    intro:draw()
+  end
+  
+  if (isMenu) then
+    menu:draw()
+  end
+  
+  if (isGameover) then
+    gameover:draw()
+  end
+  
+  if (isCampaign) then
+    if not isBoss then
+      for _,v in ipairs(actorListEndless) do
+        v:draw()
+      end
+      enemySpawner:draw()
+      
+    end
+    
+    if isBoss then
+      for _,v in ipairs(actorListBoss) do
+        v:draw()
+      end
+    end
+    shield:draw()
+    powerupHud:draw()
+    healthHud:draw()
+    scoreHud:draw()
+  end
+  
+  if (isEndless) then
+    for _,v in ipairs(actorListEndless) do
+      v:draw()
+    end
+    enemySpawner:draw()
+    shield:draw()
+    powerupHud:draw()
+    healthHud:draw()
+    scoreHud:draw()
+  end
 end
