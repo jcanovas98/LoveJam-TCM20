@@ -25,6 +25,7 @@ function Enemy:new(tag,image,x,y,time,iscale,actorList)
   self.width  = self.image:getWidth() * iscale
   
   enemySound = sound:getEnemySound()
+  enemySound:play()
   
   self.iscalec = iscale
   

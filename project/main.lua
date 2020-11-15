@@ -25,6 +25,7 @@ local actorListBoss = {}
 local isIntro = true
 local isMenu = false
 local isIntroCampaign = false
+
 local isEndless = false
 local isCampaign = false
 local isBoss = false
@@ -165,7 +166,6 @@ function love.update(dt)
       end
       if love.keyboard.isDown ("escape") then
       love.event.quit(0)
-      
       end
     end
     
@@ -231,7 +231,6 @@ function love.update(dt)
       end
     if love.keyboard.isDown ("escape") then
       love.event.quit(0)
-      
       end
     end
     
@@ -310,7 +309,6 @@ function love.draw()
   end
   
   if (isEndless) then
-    
     for _,v in ipairs(actorListEndless) do
       v:draw()
     end
@@ -325,7 +323,4 @@ function love.draw()
   if (isPause) then
       pause:draw()
     end
-
-    
-  
 end
