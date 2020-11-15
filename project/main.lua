@@ -23,13 +23,13 @@ local scoreHud = ScoreHud()
 function love.load(arg)
   if arg[#arg] == "-debug" then require("mobdebug").start() end -- Enable the debugging with ZeroBrane Studio
   
-  --menu = Menu()
+  menu = Menu()
   --gameOver = GameOver()
   --local background = Background(100)
   --table.insert(actorList, background)
-  
+  --[[
   bossRoom = BossRoom()
-  --table.insert(actorList, bossRoom)
+  table.insert(actorList, bossRoom)
   
   finalBoss = FinalBoss("spr/boss_sprite.png",w/3,h/2,1/2)
   table.insert(actorList, finalBoss)
@@ -42,10 +42,10 @@ function love.load(arg)
   
 end
 function love.update(dt)
-  --menu:update(dt)
+  menu:update(dt)
   --gameOver:update(dt)
   --update list
-  for _,v in ipairs(actorList) do
+  --[[for _,v in ipairs(actorList) do
     v:update(dt, actorList)
   end
 
@@ -58,9 +58,9 @@ function love.update(dt)
 end
 
 function love.draw()
-  --menu:draw()
+  menu:draw()
   --gameOver:draw()
-  bossRoom:draw()
+  --[[bossRoom:draw()
   for _,v in ipairs(actorList) do
     v:draw()
   end

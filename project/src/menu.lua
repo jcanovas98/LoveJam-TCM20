@@ -26,10 +26,11 @@ local t = timer(3, function() transition = true end)
 
 
 function Menu:new()
-  table.insert(buttons, Menu:newButton(" Start", function() startGame = true end))
-  table.insert(buttons, Menu:newButton("Options", self.options))
-  table.insert(buttons, Menu:newButton("Controls", self.controls))
-  table.insert(buttons, Menu:newButton("   Exit", function() love.event.quit(0) end))
+  table.insert(buttons, Menu:newButton(" start", function() startGame = true end))
+  table.insert(buttons, Menu:newButton("endless", function() startGame = true end))
+  table.insert(buttons, Menu:newButton(" options", self.options))
+  table.insert(buttons, Menu:newButton("controls", self.controls))
+  table.insert(buttons, Menu:newButton("  exit", function() love.event.quit(0) end))
   
   self.image = background
   asteroidRot = 0
@@ -58,21 +59,22 @@ function Menu:draw()
   love.graphics.draw(self.image, 0, 0, 0, 0.7, 1)
   love.graphics.draw(asteroids, w/2, h/2, math.rad(-30), 3, 3, 256, 144)
   
-  local margin = 120
+  local margin = 95
   local buttonW = w/4
   local buttonH = h/7
   local buttonX = w/2 - buttonW/2
   local buttonY = h/2 - buttonH/2 - 50
-  font = love.graphics.newFont("Glitch inside.otf", 100)
+  font = love.graphics.newFont("Starjout.ttf", 100)
   love.graphics.draw(interfaceSprite, 0, 0, 0, 1.94, 2)
-  love.graphics.print("STAR WARS", font, w/9+15, h/6)
+  love.graphics.print("STAR WARS", font, w/5 + 15, h/9)
   
   
-  font = love.graphics.newFont("Glitch inside.otf", 40)
+  font = love.graphics.newFont("Starjedi.ttf", 40)
   for i, button in ipairs(buttons) do
     local mX, mY = love.mouse.getPosition()
     local bX = buttonX
     local bY = buttonY + margin * (i - 1)
+    
     
     
     local select = mX > bX and mX < bX + buttonW and mY > bY and mY < bY + buttonH
@@ -97,21 +99,21 @@ function Menu:draw()
   
   local textW = font:getWidth(button.text)
   local textH = font:getHeight(button.text)
-  if i == 3 then
-    font = love.graphics.newFont("Glitch inside.otf", 32)
+  if i == 3 or i == 4 then
+    font = love.graphics.newFont("Starjedi.ttf", 30)
   else
-    font = love.graphics.newFont("Glitch inside.otf", 40)
+    font = love.graphics.newFont("Starjedi.ttf", 36)
   end
     
-  love.graphics.print(button.text, font, w/2 - buttonW/4-20, bY + buttonH/4-15)
+  love.graphics.print(button.text, font, w/2 - buttonW/3, bY + buttonH/4-26)
   
 end
   
   if (optionsPanel) then
     love.graphics.setColor(1,1,1,0.9)
     love.graphics.draw(panelSprite, w/1.61, h/2.6, 0, 0.9, 0.9)
-    font = love.graphics.newFont("Glitch inside.otf", 20)
-    love.graphics.setColor(0,0,0,1)
+    font = love.graphics.newFont("Starjedi.ttf", 20)
+    love.graphics.setColor(1,1,1,1)
     love.graphics.print("press enter to close", font, w/1.5+40, h/1.5)
     love.graphics.setColor(1,1,1)
     if love.keyboard.isDown("return") then
@@ -123,10 +125,12 @@ end
   if (controlsPanel) then
     love.graphics.setColor(1,1,1,0.9)
     love.graphics.draw(panelSprite, 0, h/2.6, 0, 0.9, 0.9)
-    font = love.graphics.newFont("Glitch inside.otf", 25)
-    love.graphics.setColor(0,0,0,1)
-    love.graphics.print("MOVE    -    W A S D", font, 50, h/2.1)
-    love.graphics.print("SHOOT  -  SPACE BAR", font, 30, h/1.75)
+    font = love.graphics.newFont("Starjedi.ttf", 25)
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.print("move     -   w a s d", font, 30, h/2.3)
+    love.graphics.print("shoot    -   spacebar", font, 30, h/2.15)
+    love.graphics.print("shield    -       q", font, 30, h/1.9)
+    love.graphics.print("booster -       e", font, 30, h/1.8)
     font = love.graphics.newFont("Glitch inside.otf", 20)
     love.graphics.print("press enter to close", font, 90, h/1.5)
     love.graphics.setColor(1,1,1)
