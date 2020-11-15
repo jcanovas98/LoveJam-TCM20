@@ -1,13 +1,16 @@
+require "data"
 local Object = Object or require "lib.classic"
 local Vector = Vector or require "src/vector"
 local Player = Player or require "src/player"
 local Explosion = Explosion or require "src/explosion"
 local PowerupHud = PowerupHud or require "src/powerupHud"
+local EnemyBullet = EnemyBullet or require "src/enemyBullet"
 local Enemy = Object:extend()
 local w, h = love.graphics.getDimensions()
 
-function Enemy:new(num,image,x,y,time,iscale)
-  self.tag = "enemy"..num
+function Enemy:new(tag,image,x,y,time,iscale,actorList)
+  self.tag = "enemy"..enemyNum
+  enemyNum = enemyNum + 1
   self.position = Vector.new(x or 0, y or 0)
   self.scale = Vector.new(1,1)
   self.speed = speed or 30
@@ -35,6 +38,8 @@ function Enemy:new(num,image,x,y,time,iscale)
   self.distM = 0 -- distancia recorrida
   
   self.destroyD = false
+  
+  self.bulletTimer = 0
 end
 
 function Enemy:update(dt, actorList)  
@@ -51,8 +56,19 @@ function Enemy:update(dt, actorList)
   
   if self.depthR >= 0.99 then --screen end collision
     self:destroy(actorList)
+    player.health = player.health - 1
   end
   self:blastCollision(dt,actorList)
+  
+  --self:playerFollow(dt, actorList)
+  
+  if self.bulletTimer >= 1.5 then
+    enemyBullet = EnemyBullet("enemyBullet","spr/blast3_verde.png",self.xF,self.yF,self.position.x,self.position.y,1,0.07,self.depthR)
+    table.insert(actorList, enemyBullet)
+    self.bulletTimer = 0
+  end
+  self.bulletTimer =  self.bulletTimer + dt
+  print(self.depthR)
 end
 
 function Enemy:draw()
@@ -113,6 +129,39 @@ function Enemy:playerCollision(dt, actorList, powerupHud)
 end
 end
 
+--[[function Enemy:playerFollow(dt, actorList)
+  if self.depthR >= 0.25 then
+    for _,v in ipairs(actorList) do
+      if v.tag == "player" then
+        if self.position.x ~= v.position.x or self.position.x ~= v.position.x then
+          if self.xF > v.position.x then
+            self.position.x = self.position.x - 1
+          elseif self.xF < v.position.x then
+            self.position.x = self.position.x + 1
+          end
+          if self.yF > v.position.y then
+            self.position.y = self.position.y - 1
+          elseif self.yF < v.position.y then
+            self.position.y = self.position.y + 1
+          end
+            self.xI = self.position.x
+            self.yI = self.position.y
+            self.xF = w/2 - minW/2 + self.xI * w * self.depthR/ w
+            self.yF = h/2 - minH - minH/2 + self.yI * h * self.depthR / h
+            self.xI =  w/2 - minW/2 + self.xF * minW / w
+            self.yI = h/2 - minH - minH/2 + self.yF * minH / h
+
+            self.forward = Vector.new(self.xF - self.xI, self.yF - self.yI)
+            self.forward:normalize()
+  
+            self.dist = math.sqrt(math.pow(self.xF - self.xI, 2) + math.pow(self.yF - self.yI, 2))
+            
+            self.distM = self.depthR * self.dist
+        end
+      end
+    end
+  end
+end]]--
 
 function Enemy:destroy(actorList)
     for _,v in ipairs(actorList) do
