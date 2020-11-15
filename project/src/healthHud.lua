@@ -11,6 +11,10 @@ function HealthHud:new()
 end
 
 function HealthHud:update(dt, player)
+  if (player.health == 3) then
+    self.healthAngle = -90
+  end
+  
   if (player.health == 2) then
     self.healthAngle = 30
   elseif (player.health == 1) then
@@ -29,9 +33,6 @@ function HealthHud:draw()
   love.graphics.draw(self.image, 291, 23, 0, 0.15, 0.15)
 end
 
-function HealthHud:getHealth()
-  return self.health
-end
 
 function HealthHud:resetHud()
   self.health = 3

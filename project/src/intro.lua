@@ -15,4 +15,9 @@ function Intro:draw()
   love.graphics.draw(self.intro, w/7, h/5)
 end
 
+function Intro:stop()
+  self.intro:pause()
+end
+
+
 return Intro

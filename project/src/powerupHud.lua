@@ -62,7 +62,8 @@ function PowerupHud:draw()
 end
 
 function PowerupHud:resetHud()
-
+  self.speedAngle = -90
+  self.shieldAngle = -90
 end
 
 return PowerupHud

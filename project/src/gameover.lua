@@ -7,7 +7,7 @@ local alreadyPlayed = false
 local audio = Audio()
 local font1 = love.graphics.newFont("Starjhol.ttf", 100)
 local font2= love.graphics.newFont("Starjedi.ttf", 100)
-local retry = false
+local retry
 local timer
 local blinkTimer
 local alpha1 = 0
@@ -17,8 +17,9 @@ function Gameover:new()
   self.image = love.graphics.newImage("spr/gameoverScreen.png")
   self.image:setFilter("nearest", "nearest") 
   self.animation = self:NewAnimation(self.image, 480, 270, 1)
-  gameoverTrack = audio:getGameover()
+  self.gameoverTrack = audio:getGameover()
   self.timer = 0
+  self.retry = false
   self.blinkTimer = 0
 end
 
@@ -29,7 +30,7 @@ function Gameover:update(dt)
   end
   
   if (not self.alreadyPlayed) then
-    gameoverTrack:play()
+    self.gameoverTrack:play()
     self.alreadyPlayed = true
   end
   
@@ -80,6 +81,7 @@ function Gameover:setRetry()
   self.retry = false
   self.alreadyPlayed = false
   self.timer = 0
+  self.gameoverTrack:stop()
 end
 
 function Gameover:NewAnimation(image, width, height, duration)
