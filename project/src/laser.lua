@@ -14,7 +14,7 @@ local turretX3 = 200
 local turretY3 = -30
 local destroyed3 = false
 
-local turretX4 = 395
+local turretX4 = 300
 local turretY4 = -35
 local destroyed4 = false
 

@@ -11,6 +11,7 @@ local laserDelay = 0.3
 local horizontalMov = false
 local allDestroyed = false
 local explosionTimer = 0
+local healthTimer = 0
 
 
 function FinalBoss:new(image,x,y,scale)
@@ -34,6 +35,7 @@ function FinalBoss:new(image,x,y,scale)
   self.height = self.image:getHeight() * scale
   self.width  = self.image:getWidth() * scale
   self.lasers = nil 
+  self.tag = "boss"
   
   self.timer = 0
   self.spawnLaser = true
@@ -44,9 +46,11 @@ function FinalBoss:new(image,x,y,scale)
   self.laserX = 0
   self.laserY = 0
   self.laserShoots = 0
+  self.depthR = 0
 end
 
 function FinalBoss:update(dt, actorList)
+  healthTimer = healthTimer + dt
   if self.health1 == 0 and self.health2 == 0 and self.health3 == 0 and self.health4 == 0 then
     self.allDestroyed = true
   end
@@ -169,6 +173,7 @@ function FinalBoss:update(dt, actorList)
   self.timer = self.timer + dt
   
   self:blastCollision(dt, actorList)
+  self:playerCollision(dt, actorList)
 end
 
 function FinalBoss:draw()
@@ -177,7 +182,7 @@ function FinalBoss:draw()
   self:drawHealth(self.healthAngle1, self.position.x - 30, self.position.y + 15)
   self:drawHealth(self.healthAngle2, self.position.x + 90, self.position.y + 20)
   self:drawHealth(self.healthAngle3, self.position.x + 200, self.position.y + 25)
-  self:drawHealth(self.healthAngle4, self.position.x + 395, self.position.y + 30)
+  self:drawHealth(self.healthAngle4, self.position.x + 300, self.position.y + 30)
   
 end
 
@@ -188,9 +193,65 @@ function FinalBoss:drawHealth(healthAngle, x, y)
 end
 
 function FinalBoss:blastCollision(dt, actorList)
---PENDIENTE
+
+  for _,v in ipairs(actorList) do
+      if v.tag:sub(1,5) == "blast" then
+        if v.depthR > 0.95 then
+          if self.position.x -30 > w/2 - 40 and self.position.x -30 < w/2 + 40 and self.health1 > 0 then
+            self.health1 = self.health1  -  1
+            table.remove(actorList, _) --remove blast
+            
+            local explosion = Explosion(self.position.x -30, self.position.y)
+            actorList[#actorList + 1] = explosion
+            self.destroyD = true
+          end
+          if self.position.x + 90 > w/2 - 40 and self.position.x + 90 < w/2 + 40 and self.health2 > 0 then
+            self.health2 = self.health2  -  1
+            table.remove(actorList, _) --remove blast
+            
+            local explosion = Explosion(self.position.x + 90, self.position.y)
+            actorList[#actorList + 1] = explosion
+            self.destroyD = true
+          end
+          if self.position.x + 200 > w/2 - 40 and self.position.x + 200 < w/2 + 40 and self.health3 > 0 then
+            self.health3 = self.health3  -  1
+            table.remove(actorList, _) --remove blast
+            
+            local explosion = Explosion(self.position.x + 200, self.position.y)
+            actorList[#actorList + 1] = explosion
+            self.destroyD = true
+          end
+          if self.position.x + 300 > w/2 - 40 and self.position.x + 300 < w/2 + 40 and self.health4 > 0 then
+            self.health4 = self.health4  -  1
+            table.remove(actorList, _) --remove blast
+            
+            local explosion = Explosion(self.position.x + 300, self.position.y)
+            actorList[#actorList + 1] = explosion
+            self.destroyD = true
+          end
+        end
+      end
+  end
 end
 
+function FinalBoss:playerCollision(dt, actorList)
+  if healthTimer > 1 then
+    for _,v in ipairs(actorList) do
+      if v.tag == "player" then
+        for e,k in ipairs(actorList) do
+          if k.tag == "explosion" then
+            if k.position.x + k.width/2 > v.position.x and k.position.x < v.position.x + v.width/2 and 
+              k.position.y + k.height/2 > v.position.y and k.position.y < v.position.y + v.height/2 then
+              
+              v.health = v.health - 1
+                healthTimer = 0
+            end
+          end
+        end
+      end
+    end
+  end
+end
 function FinalBoss:getAllDestroyed()
   return self.allDestroyed
 end

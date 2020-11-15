@@ -9,6 +9,8 @@ function Explosion:new(x, y)
   self.tag = "explosion"
   explosion = love.graphics.newImage("spr/explosion.png")
   self.animation = self:NewAnimation(explosion, 300, 300, 1)
+  self.width = explosion:getWidth()
+  self.height = explosion:getHeight()
 end
 
 function Explosion:update(dt, actorList)

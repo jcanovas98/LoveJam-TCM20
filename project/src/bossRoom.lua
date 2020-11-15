@@ -17,6 +17,7 @@ function BossRoom:new(speed)
   self.alpha3 = 1.5
   self.endingTimer = 0
   self.ending = false
+  self.tag = "bossRoom"
 end
 
 function BossRoom:update(dt, allDestroyed)
