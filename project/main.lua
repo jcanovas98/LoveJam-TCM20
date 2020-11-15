@@ -24,8 +24,8 @@ local actorListBoss = {}
 
 local isIntro = false
 local isMenu = false
-local isIntroCampaign = true
-local isEndless = false
+local isIntroCampaign = false
+local isEndless = true
 local isCampaign = false
 local isBoss = false
 local isGameover = false
@@ -162,7 +162,10 @@ function love.update(dt)
         isPause = false
       end
       if love.keyboard.isDown ("escape") then
-      love.event.quit(0)
+      --love.event.quit(0)
+      isPause = false
+      isCampaign = false
+      isMenu = true
       end
     end
     
@@ -227,7 +230,10 @@ function love.update(dt)
       isPause = false
       end
     if love.keyboard.isDown ("escape") then
-      love.event.quit(0)
+      --love.event.quit(0)
+      isPause = false
+      isEndless = false
+      isMenu = true
       end
     end
     
@@ -290,6 +296,7 @@ function love.draw()
         v:draw()
       end
       enemySpawner:draw()
+      textBox:draw()
       
     end
     
@@ -314,12 +321,13 @@ function love.draw()
     powerupHud:draw()
     healthHud:draw()
     scoreHud:draw()
+    textBox:draw()
   end
   
   if (isPause) then
       pause:draw()
     end
-end
-    textBox:draw()
-  end
+
+    
+  
 end
