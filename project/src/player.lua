@@ -30,6 +30,8 @@ function Player:new(image,x,y,speed,iscale)
   self.activateShield = false
   self.chargeSpeed = false
   self.activateSpeed = false
+  self.invuln = false
+  self.invulnCounter = 0
   
   audio = Audio()
   shootSound = audio:getShoot()
@@ -37,6 +39,9 @@ end
 
 function Player:update(dt, actorList)
   --Movement
+  print(self.health) 
+  print(self.invuln)
+  
   if love.keyboard.isDown("s") then
     self.forward.y = self.forward.y + 0.1
     if self.activateSpeed then
@@ -84,6 +89,15 @@ function Player:update(dt, actorList)
       self.forward.x = self.forward.x + 0.2
     end
   end
+  
+  if self.invuln then
+    if self.invulnCounter > 5 then
+      self.invuln = false
+      self.invulnCounter = 0
+    end
+    self.invulnCounter = self.invulnCounter + dt
+  end
+
   
   --Shoot
   if love.keyboard.isDown("space") and self.timer > 0.5 and (self.forward.x < 0.1 and self.forward.x > -0.1) and (self.forward.y < 0.1 and self.forward.y > -0.1) then

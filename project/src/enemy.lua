@@ -52,7 +52,7 @@ function Enemy:update(dt, actorList)
   self.height = self.image:getHeight() * self.iscale
   self.width  = self.image:getWidth() * self.iscale
   
-  self:playerCollision(dt, actorList, powerupHud)
+  self:playerCollision(dt, actorList, powerupHud, player)
   
   if self.depthR >= 0.99 then --screen end collision
     self:destroy(actorList)
@@ -109,7 +109,7 @@ function Enemy:blastCollision(dt, actorList)
   end
 end
 
-function Enemy:playerCollision(dt, actorList, powerupHud)
+function Enemy:playerCollision(dt, actorList, powerupHud, player)
   if self.depthR >= 0.85 and self.depthR < 0.99 then
     for _,v in ipairs(actorList) do
       if v.tag == "player" then
@@ -118,9 +118,9 @@ function Enemy:playerCollision(dt, actorList, powerupHud)
           self:destroy(actorList) --remove meteor
           local explosion = Explosion(self.position.x, self.position.y)
           actorList[#actorList + 1] = explosion
-          if not player.activateShield then
+          if not player.activateShield and not player.invuln then
             player.health = player.health - 1
-            print("A")
+            player.invuln = true
           else
             player.activateShield = false
             powerupHud.shieldAngle = -90
