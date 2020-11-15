@@ -39,6 +39,7 @@ local gameover = Gameover()
 
 local actorLength 
 
+
 function love.load(arg)
   math.randomseed(os.time())
   
