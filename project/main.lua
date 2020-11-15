@@ -22,10 +22,10 @@ local IntroCampaign = IntroCampaign or require "src/introCampaña"
 local actorListEndless = {}
 local actorListBoss = {}
 
-local isIntro = false
+local isIntro = true
 local isMenu = false
 local isIntroCampaign = false
-local isEndless = true
+local isEndless = false
 local isCampaign = false
 local isBoss = false
 local isGameover = false
@@ -103,12 +103,14 @@ function love.update(dt)
     if menu:getStartCampaign() then
       isMenu = false
       isCampaign = true
+      
       menuTrack:stop()
     end
     
     if menu:getStartEndless() then
       isMenu = false
       isEndless = true
+      
       menuTrack:stop()
     end
     
@@ -162,10 +164,8 @@ function love.update(dt)
         isPause = false
       end
       if love.keyboard.isDown ("escape") then
-      --love.event.quit(0)
-      isPause = false
-      isCampaign = false
-      isMenu = true
+      love.event.quit(0)
+      
       end
     end
     
@@ -230,10 +230,8 @@ function love.update(dt)
       isPause = false
       end
     if love.keyboard.isDown ("escape") then
-      --love.event.quit(0)
-      isPause = false
-      isEndless = false
-      isMenu = true
+      love.event.quit(0)
+      
       end
     end
     
