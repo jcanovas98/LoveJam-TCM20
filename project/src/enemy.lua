@@ -3,10 +3,13 @@ local Object = Object or require "lib.classic"
 local Vector = Vector or require "src/vector"
 local Player = Player or require "src/player"
 local Explosion = Explosion or require "src/explosion"
+local Audio = Audio or require "src/audio"
 local PowerupHud = PowerupHud or require "src/powerupHud"
 local EnemyBullet = EnemyBullet or require "src/enemyBullet"
 local Enemy = Object:extend()
 local w, h = love.graphics.getDimensions()
+
+local sound = Audio()
 
 function Enemy:new(tag,image,x,y,time,iscale,actorList)
   self.tag = "enemy"..enemyNum
@@ -19,6 +22,8 @@ function Enemy:new(tag,image,x,y,time,iscale,actorList)
   self.origin = Vector.new(self.image:getWidth()/2 ,self.image:getHeight()/2)
   self.height = self.image:getHeight() * iscale
   self.width  = self.image:getWidth() * iscale
+  
+  enemySound = sound:getEnemySound()
   
   self.iscalec = iscale
   
@@ -63,6 +68,7 @@ function Enemy:update(dt, actorList)
   --self:playerFollow(dt, actorList)
   
   if self.bulletTimer >= 1.5 then
+    enemySound:play()
     enemyBullet = EnemyBullet("enemyBullet","spr/blast3_verde.png",self.xF,self.yF,self.position.x,self.position.y,1,0.07,self.depthR)
     actorList[#actorList + 1] = enemyBullet
     self.bulletTimer = 0

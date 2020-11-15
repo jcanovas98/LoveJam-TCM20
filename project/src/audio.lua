@@ -9,6 +9,11 @@ function Audio:new()
   track2 = love.audio.newSource("spr/track_2.mp3", "stream")
   click = love.audio.newSource("spr/click_sound.mp3", "static")
   shoot = love.audio.newSource("spr/shoot_sound.mp3", "static")
+  
+  explosion = love.audio.newSource("spr/explosion_sound.mp3", "static")
+  win = love.audio.newSource("spr/missionComplete.mp3", "static")
+  bossTrack = love.audio.newSource("spr/bossTrack.mp3", "stream")
+  enemySound = love.audio.newSource("spr/enemySound.mp3", "static")
 end
 
 function Audio:update(dt)
@@ -42,5 +47,14 @@ end
 function Audio:getShoot()
   return shoot
 end
+
+function Audio:getBossTrack()
+  return bossTrack
+end
+
+function Audio:getEnemySound()
+  return enemySound
+end
+
 
 return Audio

@@ -52,7 +52,7 @@ function love.load(arg)
   track1 = music:getTrack1()
   track2 = music:getTrack2()
   menuTrack = music:getMenuTrack()
-  
+  bossTrack = music:getBossTrack()
 
   local background = Background(100)
   table.insert(actorListEndless, background)
@@ -154,10 +154,19 @@ function love.update(dt)
     healthHud:update(dt, player)
     scoreHud:update(dt)
     player:UsePowerups(powerupHud)
+    
+    if random == 2 then
+      track1:play()
+    elseif random == 1 then
+      track2:play()
+    end
 
     if scoreHud:getScore() > 2020 then
       --BOSS TRIGGER THINGS
       isBoss = true
+      track1:stop()
+      track2:stop()
+      bossTrack:play()
     end
     
     if not isBoss then
