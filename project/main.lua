@@ -317,7 +317,6 @@ function love.draw()
     powerupHud:draw()
     healthHud:draw()
     scoreHud:draw()
-    textBox:draw()
   end
   
   if (isPause) then
